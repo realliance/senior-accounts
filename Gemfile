@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -26,12 +28,14 @@ gem 'cancancan', '~> 3.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', '~> 11.1', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', '~> 11.1', platforms: %i[mri mingw x64_mingw]
   # Use rspec with extensions for unit testing
   gem 'rspec', '~> 3.9'
   gem 'rspec-rails', '~> 4.0'
   # Use rubocop for linting
   gem 'rubocop', '~> 1.8', require: false
+  gem 'rubocop-rails', '~> 2.9', require: false
+  gem 'rubocop-rspec', '~> 2.1', require: false
   # Use simplecov for test coverage viewing
   gem 'simplecov', '~> 0.21', require: false
 end
@@ -43,4 +47,4 @@ group :development do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', '~> 1.2020', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', '~> 1.2020', platforms: %i[mingw mswin x64_mingw jruby]
