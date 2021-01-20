@@ -1,0 +1,93 @@
+resource_types:
+- name: pull-request
+  type: registry-image
+  source:
+    repository: teliaoss/github-pr-resource
+
+resources:
+- name: pull-request
+  type: pull-request
+  check_every: 24h
+  webhook_token: ((webhook-token))
+  source:
+    repository: realliance/senior-accounts
+    access_token: ((github-access-token))
+- name: senior-accounts-main
+  type: git
+  source:
+    uri: https://github.com/realliance/senior-accounts
+    branch: main
+- name: publish-registry
+  type: registry-image
+  source:
+    repository: quay.io/realliance/senior-accounts
+    username: ((registry_user))
+    password: ((registry_pass))
+
+jobs:
+  - name: pr-validation
+    plan:
+    - get: pull-request
+      trigger: true
+      version: every
+    - put: pull-request
+      params:
+        path: pull-request
+        status: pending
+    - task: unit-and-lint
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: ruby
+            tag: 3.0-alpine
+        inputs:
+          - name: pull-request
+        outputs:
+          - name: coverage
+            path: pull-request/coverage
+        run:
+          path: /bin/sh
+          args:
+            - -exc
+            - |
+              cd pull-request
+              bundle install
+              rails spec
+              rubocop
+      on_failure:
+        put: pull-request
+        params:
+          path: pull-request
+          status: failure
+    - put: pull-request
+      params:
+        path: pull-request
+        status: success
+  - name: publish
+    plan:
+    - get: senior-accounts-main
+      trigger: true
+    - task: build
+      privileged: true
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: vito/oci-build-task
+        inputs:
+        - name: senior-accounts-main
+          path: .
+        outputs:
+        - name: image
+        run:
+          path: build
+    - put: publish-registry
+      params:
+        image: image/image.tar
+
+
+      
+        
