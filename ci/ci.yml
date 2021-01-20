@@ -83,9 +83,25 @@ jobs:
         - name: image
         run:
           path: build
+    - task: get-timestamp
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: busybox
+        outputs:
+          - name: timestamp
+        run:
+          path: /bin/sh
+          args:
+            - -exc
+            - |
+              date +%Y%m%d%H%M%S > timestamp/timestamp.txt
     - put: publish-registry
       params:
         image: image/image.tar
+        additional_tags: timestamp/timestamp.txt
 
 
       
