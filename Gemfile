@@ -8,8 +8,8 @@ ruby '3.0.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.1'
 # Use unicorn as production server
-gem 'unicorn', '~> 5.1'
 gem 'listen', '~> 3.3'
+gem 'unicorn', '~> 5.1'
 # Use Rack Timeout for handling hanging clients in production
 gem 'rack-timeout', '~> 0.4'
 # Use jbuilder for easier JSON API creation
