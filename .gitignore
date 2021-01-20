@@ -32,3 +32,5 @@
 
 # Simplecov results
 coverage
+
+ci/vars.yml

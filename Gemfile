@@ -7,8 +7,11 @@ ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.1'
-# Use Puma as the app server
-gem 'puma', '~> 5.0'
+# Use unicorn as production server
+gem 'listen', '~> 3.3'
+gem 'unicorn', '~> 5.1'
+# Use Rack Timeout for handling hanging clients in production
+gem 'rack-timeout', '~> 0.4'
 # Use jbuilder for easier JSON API creation
 gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
@@ -18,8 +21,6 @@ gem 'rack-cors', '~> 1.1'
 
 # Use PostgreSQL for production database
 gem 'pg', '~> 1.2'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
 
 # Use Devise for user authentication
 gem 'devise', '~> 4.7'
@@ -27,6 +28,10 @@ gem 'devise', '~> 4.7'
 gem 'cancancan', '~> 3.2'
 
 group :development, :test do
+  # Use Puma as the app server
+  gem 'puma', '~> 5.0'
+  # Use sqlite3 as the development database
+  gem 'sqlite3', '~> 1.4'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', '~> 11.1', platforms: %i[mri mingw x64_mingw]
   # Use rspec with extensions for unit testing
@@ -41,7 +46,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'listen', '~> 3.3'
   # Use spring for development speed up
   gem 'spring', '~> 2.1'
 end
