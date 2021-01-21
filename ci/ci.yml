@@ -7,17 +7,20 @@ resource_types:
 resources:
 - name: pull-request
   type: pull-request
+  icon: source-branch-check
   check_every: 1m
   source:
     repository: realliance/senior-accounts
     access_token: ((github-access-token))
 - name: senior-accounts-main
   type: git
+  icon: github
   source:
     uri: https://github.com/realliance/senior-accounts
     branch: main
 - name: publish-registry
   type: registry-image
+  icon: docker
   source:
     repository: quay.io/realliance/senior-accounts
     username: ((registry_user))
