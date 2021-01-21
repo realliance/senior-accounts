@@ -7,21 +7,40 @@ resource_types:
 resources:
 - name: pull-request
   type: pull-request
+  icon: source-branch
   check_every: 1m
   source:
     repository: realliance/senior-accounts
     access_token: ((github-access-token))
 - name: senior-accounts-main
   type: git
+  icon: git
   source:
     uri: https://github.com/realliance/senior-accounts
     branch: main
 - name: publish-registry
   type: registry-image
+  icon: docker
   source:
     repository: quay.io/realliance/senior-accounts
     username: ((registry_user))
     password: ((registry_pass))
+- name: ruby-build-base
+  type: registry-image
+  icon: docker
+  source:
+    repository: quay.io/christopherjmiller/ruby-build-base
+    tag: 3.0-alpine-1
+- name: oci-build-task
+  type: registry-image
+  icon: docker
+  source:
+    repository: vito/oci-build-task
+- name: busybox
+  type: registry-image
+  icon: docker
+  source:
+    repository: busybox
 
 jobs:
   - name: pr-validation
@@ -29,18 +48,15 @@ jobs:
     - get: pull-request
       trigger: true
       version: every
+    - get: ruby-build-base
     - put: pull-request
       params:
         path: pull-request
         status: pending
     - task: unit-and-lint
+      image: ruby-build-base
       config:
         platform: linux
-        image_resource:
-          type: registry-image
-          source:
-            repository: quay.io/christopherjmiller/ruby-build-base
-            tag: 3.0-alpine-1
         inputs:
           - name: pull-request
         outputs:
@@ -68,14 +84,13 @@ jobs:
     plan:
     - get: senior-accounts-main
       trigger: true
+    - get: oci-build-task
+    - get: busybox
     - task: build
       privileged: true
+      image: oci-build-task
       config:
         platform: linux
-        image_resource:
-          type: registry-image
-          source:
-            repository: vito/oci-build-task
         inputs:
         - name: senior-accounts-main
           path: .
@@ -83,9 +98,22 @@ jobs:
         - name: image
         run:
           path: build
+    - task: get-timestamp
+      image: busybox
+      config:
+        platform: linux
+        outputs:
+          - name: timestamp
+        run:
+          path: /bin/sh
+          args:
+            - -exc
+            - |
+              date +%Y%m%d%H%M%S > timestamp/timestamp.txt
     - put: publish-registry
       params:
         image: image/image.tar
+        additional_tags: timestamp/timestamp.txt
 
 
       
