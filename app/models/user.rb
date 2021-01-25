@@ -7,4 +7,8 @@ class User < ApplicationRecord
          :recoverable, :validatable
 
   validates :username, presence: true, length: { minimum: 5, maximum: 20 }
+  validates :email, presence: true
+  validates :rating, presence: true
+  validates :resources, presence: true
+
 end
