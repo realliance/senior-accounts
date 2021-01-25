@@ -7,12 +7,17 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.1]
       t.string :email,              null: false, default: ''
       t.string :encrypted_password, null: false, default: ''
       t.string :username,           null: false, default: ''
-      t.integer :rating,            null: true
-      t.integer :resources,         null: true
+      t.integer :rating,            null: false, default: 0
+      t.integer :resources,         null: false, default: 0
 
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
+
+      ## Confirmable
+      t.string   :confirmation_token
+      t.datetime :confirmed_at
+      t.datetime :confirmation_sent_at
 
       t.timestamps null: false
     end
