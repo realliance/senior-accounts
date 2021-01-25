@@ -8,19 +8,19 @@ RSpec.describe User, type: :model do
                         resources: 100)
   end
 
-    it 'Can be created' do
-      expect(user).to be_valid
-    end
+  it 'Can be created' do
+    expect(user).to be_valid
+  end
 
-    it 'Username should be present' do
-      expect(user.username).not_to eq nil
-    end
+  it 'Username should be present' do
+    expect(user.username).not_to eq nil
+  end
 
-    it 'Email should be present' do
-      expect(user.email).not_to eq nil
-    end
+  it 'Email should be present' do
+    expect(user.email).not_to eq nil
+  end
 
-    it 'Password should be present' do
-      expect(user.password).not_to eq nil
-    end
+  it 'Password should be present' do
+    expect(user.password).not_to eq nil
+  end
 end
