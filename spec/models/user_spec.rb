@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { build(:random_user) }
+  let(:user) { build(:user) }
 
   it 'Can be created' do
     expect(user.save).to eq(true)
