@@ -12,6 +12,7 @@ rules:
   empty-values: enable
   indentation:
     spaces: 2
+  line-length: disable
   octal-values: enable
   quoted-strings:
     required: only-when-needed

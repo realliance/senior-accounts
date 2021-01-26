@@ -8,3 +8,5 @@ AllCops:
   NewCops: enable
 Style/Documentation:
   Enabled: false
+Metrics/MethodLength:
+  Enabled: false

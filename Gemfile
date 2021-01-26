@@ -36,7 +36,11 @@ group :development, :test do
   gem 'byebug', '~> 11.1', platforms: %i[mri mingw x64_mingw]
   # Use rspec with extensions for unit testing
   gem 'rspec', '~> 3.9', require: false
-  gem 'rspec-rails', '~> 4.0', require: false
+  gem 'rspec-rails', '~> 4.0'
+  # Use factory_bot_rails for defining and using factories
+  gem 'factory_bot_rails', '~> 6.1.0'
+  # Use ffaker to generate fake data for unit testing
+  gem 'ffaker', '~> 2.17'
   # Use rubocop for linting
   gem 'rubocop', '~> 1.8', require: false
   gem 'rubocop-rails', '~> 2.9', require: false
