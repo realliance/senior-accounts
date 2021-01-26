@@ -51,12 +51,12 @@ jobs:
       - get: pull-request
         trigger: true
         version: every
-      - get: ruby
-      - get: python
       - put: pull-request
         params:
           path: pull-request
           status: pending
+      - get: ruby
+      - get: python
       - in_parallel:
           - task: rubocop
             image: ruby
