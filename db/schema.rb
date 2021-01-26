@@ -17,11 +17,14 @@ ActiveRecord::Schema.define(version: 20_210_125_051_022) do
     t.string 'email', default: '', null: false
     t.string 'encrypted_password', default: '', null: false
     t.string 'username', default: '', null: false
-    t.integer 'rating'
-    t.integer 'resources'
+    t.integer 'rating', default: 0, null: false
+    t.integer 'resources', default: 0, null: false
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
-    t.datetime 'remember_created_at'
+    t.string 'confirmation_token'
+    t.datetime 'confirmed_at'
+    t.datetime 'confirmation_sent_at'
+    t.string 'unconfirmed_email'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['email'], name: 'index_users_on_email', unique: true

@@ -3,24 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject(:user) do
-    described_class.new(username: 'wilson', email: 'wilson@gmail.com', password: 'password', rating: 2000,
-                        resources: 100)
-  end
+  let(:user) { build(:random_user) }
 
   it 'Can be created' do
-    expect(user).to be_valid
+    expect(user.save).to eq(true)
   end
 
-  it 'Username should be present' do
-    expect(user.username).not_to eq nil
+  it 'Ensures username presence' do
+    user.username = nil
+    expect(user.save).to eq(false)
   end
 
-  it 'Email should be present' do
-    expect(user.email).not_to eq nil
+  it 'Ensures email presence' do
+    user.email = nil
+    expect(user.save).to eq(false)
   end
 
-  it 'Password should be present' do
-    expect(user.password).not_to eq nil
+  it 'Ensures rating presence' do
+    user.rating = nil
+    expect(user.save).to eq(false)
+  end
+
+  it 'Ensures resources presence' do
+    user.resources = nil
+    expect(user.save).to eq(false)
   end
 end
