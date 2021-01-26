@@ -4,8 +4,7 @@
     "config:base",
     ":pinVersions",
     "docker:pinDigests",
-    ":rebaseStalePrs",
-    ":automergeAll"
+    ":rebaseStalePrs"
   ],
   "kubernetes": {
     "fileMatch": ["deploy/.+\\.yaml$"]
