@@ -237,6 +237,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (>= 1.4.4)
+  bundler (= 2.2.3)
   byebug (~> 11.1)
   cancancan (~> 3.2)
   database_consistency
