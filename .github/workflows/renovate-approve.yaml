@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths: [deploy]
 jobs:
-  auto-approve:
+  renovate-approve:
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/auto-approve-action@v2.0.0
