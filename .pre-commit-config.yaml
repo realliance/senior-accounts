@@ -32,11 +32,11 @@ repos:
     rev: v1.3.3
     hooks:
       - id: rubocop
-        exclude: (bin/.*)|Gemfile.lock
+        exclude: bin/.*|Gemfile\.lock
       - id: rspec
   - repo: local
     hooks:
-      - id: database_consistency
+      - id: database-consistency
         name: Check database consistency
         entry: bundle exec database_consistency
         language: system
@@ -52,3 +52,9 @@ repos:
         entry: renovate-config-validator
         language: system
         files: \.renovaterc\.json
+      - id: validate-deploy
+        name: Validate deploy manifests
+        entry: kubectl apply --dry-run=client -k deploy
+        language: system
+        pass_filenames: false
+        files: deploy/.*

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-worker_processes Integer(ENV['WEB_CONCURRENCY'] || 3)
+worker_processes 1
 timeout 15
 preload_app true
 
