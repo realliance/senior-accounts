@@ -47,6 +47,8 @@ group :development, :test do
   gem 'rubocop-rspec', '~> 2.1', require: false
   # Use simplecov for test coverage viewing
   gem 'simplecov', '~> 0.21', require: false
+  # Maintain database consistency
+  gem 'database_consistency', require: false
 end
 
 group :development do
