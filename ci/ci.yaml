@@ -35,6 +35,11 @@ resources:
     icon: docker
     source:
       repository: docker.io/python
+  - name: kubectl
+    type: registry-image
+    icon: docker
+    source:
+      repository: docker.io/bitnami/kubectl
   - name: oci-build-task
     type: registry-image
     icon: docker
@@ -57,6 +62,7 @@ jobs:
           status: pending
       - get: ruby
       - get: python
+      - get: kubectl
       - in_parallel:
           - task: rubocop
             image: ruby
@@ -89,6 +95,33 @@ jobs:
                     cd pull-request
                     bundle install
                     bundle exec rails spec
+          - task: database-consistency
+            image: ruby
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    cd pull-request
+                    bundle install
+                    bundle exec database_consistency
+          - task: validate-deploy
+            image: kubectl
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    cd pull-request
+                    kubectl apply --dry-run=client -k deploy
           - task: yamllint
             image: python
             config:
