@@ -23,7 +23,7 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, main]
       - id: trailing-whitespace
-  - repo: https://github.com/adrienverge/yamllint.git
+  - repo: https://github.com/adrienverge/yamllint
     rev: v1.25.0
     hooks:
       - id: yamllint
@@ -47,3 +47,8 @@ repos:
         entry: fly validate-pipeline --config
         language: system
         files: ci/.*
+      - id: renovate-config
+        name: Check renovate config
+        entry: renovate-config-validator
+        language: system
+        files: \.renovaterc\.json
