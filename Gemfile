@@ -39,8 +39,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0'
   # Use factory_bot_rails for defining and using factories
   gem 'factory_bot_rails', '~> 6.1.0'
-  # Use faker to generate fake data for unit testing
-  gem 'faker', '~> 2.15.1'
+  # Use ffaker to generate fake data for unit testing
+  gem 'ffaker', '~> 2.17'
   # Use rubocop for linting
   gem 'rubocop', '~> 1.8', require: false
   gem 'rubocop-rails', '~> 2.9', require: false

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user, class: 'User' do
-    email { Faker::Internet.free_email }
-    password { Faker::Internet.password }
-    username { Faker::Internet.username }
-    rating { Faker::Number.number(digits: 10) }
-    resources { Faker::Number.number(digits: 10) }
+  factory :user do
+    email { FFaker::Internet.free_email }
+    password { FFaker::Internet.password }
+    sequence(:username) { |n| "user#{n}" }
+    rating { FFaker.rand(2000) }
+    resources { FFaker.rand(2000) }
   end
 end
