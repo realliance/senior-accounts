@@ -1,0 +1,154 @@
+---
+resource_types:
+  - name: pull-request
+    type: registry-image
+    source:
+      repository: docker.io/teliaoss/github-pr-resource
+resources:
+  - name: pull-request
+    type: pull-request
+    icon: source-branch
+    check_every: 1m
+    source:
+      repository: realliance/senior-accounts
+      access_token: ((github-access-token))
+  - name: senior-accounts-main
+    type: git
+    icon: git
+    source:
+      uri: https://github.com/realliance/senior-accounts
+      branch: main
+  - name: quay
+    type: registry-image
+    icon: docker
+    source:
+      repository: quay.io/realliance/senior-accounts
+      username: ((quay-ci-account.username))
+      password: ((quay-ci-account.token))
+  - name: ruby
+    type: registry-image
+    icon: docker
+    source:
+      repository: docker.io/ruby
+  - name: python
+    type: registry-image
+    icon: docker
+    source:
+      repository: docker.io/python
+  - name: oci-build-task
+    type: registry-image
+    icon: docker
+    source:
+      repository: docker.io/vito/oci-build-task
+  - name: busybox
+    type: registry-image
+    icon: docker
+    source:
+      repository: busybox
+jobs:
+  - name: validate-pr
+    plan:
+      - get: pull-request
+        trigger: true
+        version: every
+      - put: pull-request
+        params:
+          path: pull-request
+          status: pending
+      - get: ruby
+      - get: python
+      - in_parallel:
+          - task: rubocop
+            image: ruby
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    cd pull-request
+                    gem install rubocop rubocop-rails rubocop-rspec
+                    rubocop
+          - task: rspec
+            image: ruby
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+              outputs:
+                - name: coverage
+                  path: pull-request/coverage
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    cd pull-request
+                    bundle install
+                    bundle exec rails spec
+          - task: yamllint
+            image: python
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    cd pull-request
+                    pip install --no-cache-dir yamllint
+                    yamllint .
+        on_failure:
+          put: pull-request
+          params:
+            path: pull-request
+            status: failure
+      - put: pull-request
+        params:
+          path: pull-request
+          status: success
+  - name: set-pipeline
+    plan:
+      - get: senior-accounts-main
+        trigger: true
+      - set_pipeline: self
+        file: senior-accounts-main/ci/ci.yaml
+  - name: publish
+    plan:
+      - get: senior-accounts-main
+        trigger: true
+      - get: oci-build-task
+      - get: busybox
+      - task: build
+        privileged: true
+        image: oci-build-task
+        config:
+          platform: linux
+          inputs:
+            - name: senior-accounts-main
+              path: .
+          outputs:
+            - name: image
+          run:
+            path: build
+      - task: get-timestamp
+        image: busybox
+        config:
+          platform: linux
+          outputs:
+            - name: timestamp
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                date +%Y%m%d%H%M%S > timestamp/timestamp.txt
+      - put: quay
+        params:
+          image: image/image.tar
+          additional_tags: timestamp/timestamp.txt
