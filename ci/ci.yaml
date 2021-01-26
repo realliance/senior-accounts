@@ -23,6 +23,7 @@ resources:
     icon: docker
     source:
       repository: quay.io/realliance/senior-accounts
+      tag: latest
       username: ((quay-ci-account.username))
       password: ((quay-ci-account.token))
   - name: ruby
@@ -150,19 +151,6 @@ jobs:
             - name: image
           run:
             path: build
-      - task: get-timestamp
-        image: busybox
-        config:
-          platform: linux
-          outputs:
-            - name: timestamp
-          run:
-            path: /bin/sh
-            args:
-              - -exc
-              - |
-                date +%Y%m%d%H%M%S > timestamp/timestamp.txt
       - put: quay
         params:
           image: image/image.tar
-          additional_tags: timestamp/timestamp.txt
