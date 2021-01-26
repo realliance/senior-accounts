@@ -12,6 +12,7 @@ resources:
     source:
       repository: realliance/senior-accounts
       access_token: ((github-access-token))
+      disable_ci_skip: true
   - name: senior-accounts-main
     type: git
     icon: git
