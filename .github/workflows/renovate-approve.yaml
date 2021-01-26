@@ -4,7 +4,7 @@ name: Renovate Auto Approval
 on:
   pull_request_target:
     branches: [main]
-    paths: [deploy]
+    paths: [deploy/deployment.yaml]
 jobs:
   renovate-approve:
     runs-on: self-hosted
