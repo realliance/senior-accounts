@@ -7,7 +7,7 @@ on:
     branches: [main]
 jobs:
   bypass-approve:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: khan/pull-request-comment-trigger@1.0.0
         if: github.actor == 'ConnorJC3'
