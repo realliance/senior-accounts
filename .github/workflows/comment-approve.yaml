@@ -1,0 +1,22 @@
+---
+name: Bypass Auto Approval
+# yamllint disable-line rule:truthy
+on:
+  pull_request_target:
+    types: [opened]
+    branches: [main]
+jobs:
+  bypass-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: khan/pull-request-comment-trigger@1.0.0
+        if: github.actor == 'ConnorJC3'
+        id: check
+        with:
+          trigger: '!approve'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: hmarr/auto-approve-action@v2.0.0
+        if: steps.check.outputs.triggered == 'true'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
