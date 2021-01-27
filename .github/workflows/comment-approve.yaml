@@ -19,4 +19,4 @@ jobs:
       - uses: hmarr/auto-approve-action@v2.0.0
         if: steps.check.outputs.triggered == 'true'
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.CD_TOKEN }}
