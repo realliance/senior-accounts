@@ -5,7 +5,8 @@
     ":pinVersions",
     "docker:pinDigests",
     ":rebaseStalePrs",
-    ":automergeAll"
+    ":automergeMinor",
+    ":automergeDigest"
   ],
   "kubernetes": {
     "fileMatch": ["deploy/.+\\.yaml$"],
