@@ -3,5 +3,6 @@
 
 # Dangerous files
 CODEOWNERS @realliance/infrastructure
+/.github/ @realliance/infrastructure
 /ci/ @realliance/infrastructure
 /deploy/ @realliance/infrastructure
