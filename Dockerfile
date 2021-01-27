@@ -1,4 +1,4 @@
-FROM docker.io/ruby:3.0-alpine@sha256:adb9ba9a0b0011cbf4561e6b173e5a2e345b4d6514cbcd178375b58eaa3252c1 as builder
+FROM docker.io/ruby:3.0-alpine@sha256:cbd984172d1c0f05656d3e416e65c3c72168eedecf9c1e6599fc1db615949f44 as builder
 WORKDIR /usr/src
 ENV RAILS_ENV production
 
@@ -10,7 +10,7 @@ RUN bundle config set --local without 'development test' && \
     bundle install
 
 
-FROM docker.io/ruby:3.0-alpine@sha256:adb9ba9a0b0011cbf4561e6b173e5a2e345b4d6514cbcd178375b58eaa3252c1
+FROM docker.io/ruby:3.0-alpine@sha256:cbd984172d1c0f05656d3e416e65c3c72168eedecf9c1e6599fc1db615949f44
 WORKDIR /usr/src
 ENV RAILS_ENV production
 
