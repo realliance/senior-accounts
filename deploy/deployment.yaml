@@ -25,7 +25,7 @@ spec:
             - name: PG_HOST
               value: acid-senior-accounts
             - name: PG_DATABASE
-              value: senior-accounts
+              value: senior_accounts
             - name: PG_USERNAME
               valueFrom:
                 secretKeyRef:
