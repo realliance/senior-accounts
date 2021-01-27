@@ -5,6 +5,7 @@ require:
 AllCops:
   Exclude:
     - bin/**/*
+    - vendor/**/*
   NewCops: enable
 Style/Documentation:
   Enabled: false

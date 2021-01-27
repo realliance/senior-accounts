@@ -66,14 +66,17 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+              caches:
+                - path: vendor
               run:
                 path: /bin/sh
                 args:
                   - -exc
                   - |
                     cd pull-request
-                    gem install rubocop rubocop-rails rubocop-rspec
-                    rubocop
+                    bundle config set --local path './vendor'
+                    bundle install
+                    bundle exec rubocop
           - task: rspec
             image: ruby
             config:
@@ -83,12 +86,15 @@ jobs:
               outputs:
                 - name: coverage
                   path: pull-request/coverage
+              caches:
+                - path: vendor
               run:
                 path: /bin/sh
                 args:
                   - -exc
                   - |
                     cd pull-request
+                    bundle config set --local path './vendor'
                     bundle install
                     bundle exec rails spec
           - task: database-consistency
@@ -97,12 +103,15 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+              caches:
+                - path: vendor
               run:
                 path: /bin/sh
                 args:
                   - -exc
                   - |
                     cd pull-request
+                    bundle config set --local path './vendor'
                     bundle install
                     bundle exec database_consistency
           - task: yamllint
@@ -150,6 +159,8 @@ jobs:
               path: .
           outputs:
             - name: image
+          caches:
+            - path: cache
           run:
             path: build
       - put: quay
