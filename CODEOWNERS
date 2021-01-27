@@ -2,7 +2,6 @@
 * @realliance/senior-design
 
 # Dangerous files
-CODEOWNERS @realliance/infrastructure @github-actions
 /.github/ @realliance/infrastructure @github-actions
 /ci/ @realliance/infrastructure @github-actions
 /deploy/ @realliance/infrastructure @github-actions
