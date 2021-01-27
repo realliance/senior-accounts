@@ -42,11 +42,6 @@ resources:
     icon: docker
     source:
       repository: docker.io/vito/oci-build-task
-  - name: busybox
-    type: registry-image
-    icon: docker
-    source:
-      repository: busybox
 jobs:
   - name: validate-pr
     plan:
@@ -148,7 +143,6 @@ jobs:
       - get: senior-accounts-main
         trigger: true
       - get: oci-build-task
-      - get: busybox
       - task: build
         privileged: true
         image: oci-build-task
