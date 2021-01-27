@@ -29,7 +29,7 @@ gem 'cancancan', '3.2.1'
 
 group :development, :test do
   # Use Puma as the app server
-  gem 'puma', '5.1.1'
+  gem 'puma', '5.2.0'
   # Use sqlite3 as the development database
   gem 'sqlite3', '1.4.2'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
