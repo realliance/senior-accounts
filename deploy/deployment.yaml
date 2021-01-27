@@ -18,7 +18,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: rails
-          image: quay.io/realliance/senior-accounts:latest@sha256:5ba42fdc96722574be06cc50a6288d6d3ce1c6c713509a83ce61ac78f68a0f0c
+          image: quay.io/realliance/senior-accounts:latest@sha256:17692aee6cb16d470c3909ba88c6a66cb494b9432a4ba0643a43e9fb08ce2fea
           ports:
             - containerPort: 8080
           env:
