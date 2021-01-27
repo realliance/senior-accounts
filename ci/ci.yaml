@@ -115,13 +115,15 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+              caches:
+                - path: cache
               run:
                 path: /bin/sh
                 args:
                   - -exc
                   - |
                     cd pull-request
-                    pip install --no-cache-dir yamllint
+                    pip install --cache-dir ../cache yamllint
                     yamllint .
         on_failure:
           put: pull-request
