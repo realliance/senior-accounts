@@ -2,6 +2,6 @@
 * @realliance/senior-accounts
 
 # Dangerous files
-.github/ @realliance/infrastructure @github-actions
-ci/ @realliance/infrastructure @github-actions
-deploy/ @realliance/infrastructure @github-actions
+/.github/ @realliance/infrastructure
+/ci/ @realliance/infrastructure
+/deploy/ @realliance/infrastructure
