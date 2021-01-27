@@ -2,6 +2,6 @@
 * @realliance/senior-design
 
 # Dangerous files
-/CODEOWNERS @realliance/infrastructure
+CODEOWNERS @realliance/infrastructure
 /ci/ @realliance/infrastructure
 /deploy/ @realliance/infrastructure
