@@ -3,7 +3,6 @@ name: Bypass Auto Approval
 # yamllint disable-line rule:truthy
 on:
   pull_request_target:
-    types: [opened]
     branches: [main]
 jobs:
   bypass-approve:
