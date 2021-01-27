@@ -21,6 +21,24 @@ spec:
           image: quay.io/realliance/senior-accounts:latest@sha256:59d522241c44d9abc2835f266a69d3dce03280be93e3c4f368d543d21f970d63
           ports:
             - containerPort: 8080
+          env:
+            - name: PG_HOST
+              value: acid-senior-accounts
+            - name: PG_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rails.acid-senior-accounts.credentials
+                  key: username
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rails.acid-senior-accounts.credentials
+                  key: password
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rails-env
+                  key: master-key
 ---
 apiVersion: v1
 kind: Service

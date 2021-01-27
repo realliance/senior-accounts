@@ -1,4 +1,5 @@
 ---
+exclude: config/credentials.yml.enc
 repos:
   - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
     rev: 0.1.0
