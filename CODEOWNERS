@@ -1,0 +1,7 @@
+# Default
+* @realliance/senior-design
+
+# Dangerous files
+CODEOWNERS @realliance/infrastructure
+/ci/ @realliance/infrastructure
+/deploy/ @realliance/infrastructure
