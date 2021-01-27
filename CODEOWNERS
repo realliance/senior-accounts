@@ -1,0 +1,7 @@
+# Default
+* @realliance/senior-accounts
+
+# Dangerous files
+.github/ @realliance/infrastructure @github-actions
+ci/ @realliance/infrastructure @github-actions
+deploy/ @realliance/infrastructure @github-actions
