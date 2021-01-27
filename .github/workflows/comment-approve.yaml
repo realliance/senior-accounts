@@ -3,7 +3,6 @@ name: Bypass Auto Approval
 # yamllint disable-line rule:truthy
 on:
   pull_request_target:
-    types: [opened]
     branches: [main]
 jobs:
   bypass-approve:
@@ -19,4 +18,4 @@ jobs:
       - uses: hmarr/auto-approve-action@v2.0.0
         if: steps.check.outputs.triggered == 'true'
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.CD_TOKEN }}
