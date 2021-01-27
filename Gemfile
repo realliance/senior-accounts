@@ -13,7 +13,7 @@ gem 'unicorn', '5.8.0'
 # Use Rack Timeout for handling hanging clients in production
 gem 'rack-timeout', '0.6.0'
 # Use jbuilder for easier JSON API creation
-gem 'jbuilder', '2.11.1'
+gem 'jbuilder', '2.11.2'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '1.6.0', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
