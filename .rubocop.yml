@@ -4,10 +4,13 @@ require:
   - rubocop-rails
 AllCops:
   Exclude:
+    - db/schema.rb
     - bin/**/*
     - vendor/**/*
   NewCops: enable
 Style/Documentation:
   Enabled: false
 Metrics/MethodLength:
+  Enabled: false
+Metrics/BlockLength:
   Enabled: false
