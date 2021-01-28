@@ -2,10 +2,9 @@
 
 FactoryBot.define do
   factory :user do
-    email { FFaker::Internet.free_email }
-    password { FFaker::Internet.password }
     sequence(:username) { |n| "user#{n}" }
-    rating { FFaker.rand(2000) }
-    resources { FFaker.rand(2000) }
+    email { FFaker::Internet.safe_email(username) }
+    password { FFaker::Internet.password(10, 72) }
+    password_confirmation { password }
   end
 end

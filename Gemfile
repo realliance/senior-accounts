@@ -22,8 +22,10 @@ gem 'rack-cors', '1.1.1'
 # Use PostgreSQL for production database
 gem 'pg', '1.2.3'
 
-# Use Devise for user authentication
-gem 'devise', '4.7.3'
+# Allow has_secure_password
+gem 'bcrypt', '3.1.16'
+# Better indexes
+gem 'ksuid', '0.2.0'
 # Use CanCanCan for user authorization
 gem 'cancancan', '3.2.1'
 

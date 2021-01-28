@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
-         :recoverable, :validatable, :confirmable
+  has_secure_password
+  has_secure_token :auth_token
 
-  validates :username, presence: true, length: { minimum: 5, maximum: 20 }
-  validates :email, presence: true
-  validates :rating, presence: true
-  validates :resources, presence: true
+  validates :email, presence: true, uniqueness: true, length: 1..100
+  validates :username, presence: true, uniqueness: true, length: 3..100
+  validates :password, length: 10..72, allow_blank: true
+  validates :auth_token, uniqueness: true
 end
