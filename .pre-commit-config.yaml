@@ -34,7 +34,6 @@ repos:
     hooks:
       - id: rubocop
         exclude: db/schema\.rb|vendor/.*|bin/.*|Gemfile\.lock
-      - id: rspec
   - repo: local
     hooks:
       - id: database-consistency
