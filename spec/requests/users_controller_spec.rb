@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe '/user', type: :request do
+RSpec.describe UsersController, type: :request do
   let(:valid_attributes) do
     FactoryBot.attributes_for(:user)
   end
 
   let(:invalid_attributes) do
-    FactoryBot.attributes_for(:user, username: 'a')
+    FactoryBot.attributes_for(:user, password: 'a', password_confirmation: 'a')
   end
 
   describe 'POST /create' do
@@ -63,13 +63,14 @@ RSpec.describe '/user', type: :request do
     end
 
     let(:valid_headers) do
-      { authorization: "Bearer #{user.auth_token}" }
+      { authorization: "Token #{user.auth_token}" }
     end
 
     describe 'GET /show' do
-      it 'renders a successful response' do
+      it 'renders a JSON response with the current user' do
         get user_url(user), headers: valid_headers, as: :json
         expect(response).to be_successful
+        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
@@ -82,7 +83,7 @@ RSpec.describe '/user', type: :request do
         it 'updates the requested user' do
           patch user_url, params: { user: new_attributes }, headers: valid_headers, as: :json
           user.reload
-          expect(user.authenticate('devise_sucks')).to be_true
+          expect(user.authenticate('devise_sucks')).to be_truthy
         end
 
         it 'renders a JSON response with the user' do
