@@ -6,6 +6,6 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, length: 1..100
   validates :username, presence: true, uniqueness: true, length: 3..100
-  validates :password, length: 10..71
+  validates :password, length: 10..72, allow_blank: true
   validates :auth_token, uniqueness: true
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :check_token, only: :create
+  skip_before_action :check_token, only: %i[create create_session]
 
   def create
     @user = User.create(create_params)
@@ -23,6 +23,20 @@ class UsersController < ApplicationController
     else
       render status: :bad_request, json: current_user.errors
     end
+  end
+
+  def create_session
+    @user = User.find_by(email: params[:email])
+    if @user&.validate(params[:password])
+      render json: { token: @user.auth_token }
+    else
+      head :bad_request
+    end
+  end
+
+  def destroy_session
+    current_user.regenerate_auth_token
+    head :ok
   end
 
   private

@@ -4,14 +4,14 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :request do
   let(:valid_attributes) do
-    FactoryBot.attributes_for(:user)
+    attributes_for(:user)
   end
 
   let(:invalid_attributes) do
-    FactoryBot.attributes_for(:user, password: 'a', password_confirmation: 'a')
+    attributes_for(:user, password: 'a', password_confirmation: 'a')
   end
 
-  describe 'POST /create' do
+  describe 'POST #create' do
     context 'with valid parameters' do
       it 'creates a new User' do
         expect do
@@ -41,17 +41,46 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
+  describe 'POST #create_sessions' do
+    let(:user) do
+      User.create(valid_attributes)
+    end
+
+    context 'with valid credentials' do
+      it 'returns a token' do
+        post session_url, params: { email: user.email, password: valid_attributes[:password] }, as: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.body).to eq({ token: user.auth_token }.to_json)
+      end
+    end
+
+    context 'with invalid credentials' do
+      it 'renders a bad request response' do
+        post session_url, params: { email: valid_attributes[:email], password: "a#{valid_attributes[:password]}" }, as: :json
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
   context 'when logged out' do
-    describe 'GET /show' do
+    describe 'GET #show' do
       it 'renders an unauthorized response' do
         get user_url, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
-    describe 'PATCH /update' do
+    describe 'PATCH #update' do
       it 'renders an unauthorized response' do
         patch user_url, params: { user: valid_attributes }, as: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe 'DELETE #destroy_session' do
+      it 'renders an unauthorized response' do
+        delete session_url, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -59,22 +88,22 @@ RSpec.describe UsersController, type: :request do
 
   context 'when logged in' do
     let(:user) do
-      FactoryBot.create(:user)
+      create(:user)
     end
 
     let(:valid_headers) do
       { authorization: "Token #{user.auth_token}" }
     end
 
-    describe 'GET /show' do
+    describe 'GET #show' do
       it 'renders a JSON response with the current user' do
-        get user_url(user), headers: valid_headers, as: :json
+        get user_url, headers: valid_headers, as: :json
         expect(response).to be_successful
         expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
-    describe 'PATCH /update' do
+    describe 'PATCH #update' do
       context 'with valid parameters' do
         let(:new_attributes) do
           { password: 'devise_sucks', password_confirmation: 'devise_sucks' }
@@ -99,6 +128,20 @@ RSpec.describe UsersController, type: :request do
           expect(response).to have_http_status(:bad_request)
           expect(response.content_type).to match(a_string_including('application/json'))
         end
+      end
+    end
+
+    describe 'DELETE #destroy_session' do
+      it 'renders an ok response' do
+        delete session_url, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'resets the token' do
+        token = user.auth_token
+        delete session_url, headers: valid_headers, as: :json
+        user.reload
+        expect(user.auth_token).not_to equal(token)
       end
     end
   end
