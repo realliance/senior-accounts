@@ -9,6 +9,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: hmarr/auto-approve-action@v2.0.0
-        if: github.actor == 'realliance-ci'
+        if: github.actor == 'realliance-renovate'
         with:
           github-token: ${{ secrets.CD_TOKEN }}
