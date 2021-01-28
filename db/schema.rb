@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2021_01_28_011516) do
 
-  create_table "users", id: { type: :string, limit: 27 }, force: :cascade do |t|
+  create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
     t.string "username", null: false
     t.string "email", null: false
     t.string "password_digest"

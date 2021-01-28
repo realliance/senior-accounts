@@ -3,7 +3,7 @@
 class CreateUsers < ActiveRecord::Migration[6.1]
   def change
     create_table :users, id: false do |t|
-      t.ksuid :id, primary_key: true
+      t.ksuid_binary :id, primary_key: true
 
       t.string :username, null: false
       t.index :username, unique: true
