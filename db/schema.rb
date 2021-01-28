@@ -12,12 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2021_01_28_011516) do
 
-  create_table "users", id: { type: :binary, limit: 16 }, force: :cascade do |t|
+  create_table "users", id: { type: :string, limit: 27 }, force: :cascade do |t|
     t.string "username", null: false
     t.string "email", null: false
     t.string "password_digest"
+    t.string "auth_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

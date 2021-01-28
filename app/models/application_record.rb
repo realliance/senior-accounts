@@ -3,7 +3,7 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-  # ULIDs
-  include ULID::Rails
-  ulid :id, primary_key: true
+  # KSUIDs
+  include KSUID::ActiveRecord[:id]
+  validates :id, length: 27..27
 end

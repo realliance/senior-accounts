@@ -25,7 +25,7 @@ gem 'pg', '1.2.3'
 # Allow has_secure_password
 gem 'bcrypt', '3.1.16'
 # Better indexes
-gem 'ulid-rails', '0.4.0'
+gem 'ksuid', '0.2.0'
 # Use CanCanCan for user authorization
 gem 'cancancan', '3.2.1'
 

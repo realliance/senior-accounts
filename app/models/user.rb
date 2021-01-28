@@ -2,8 +2,10 @@
 
 class User < ApplicationRecord
   has_secure_password
+  has_secure_token :auth_token
 
   validates :email, presence: true, uniqueness: true, length: 1..100
   validates :username, presence: true, uniqueness: true, length: 3..100
   validates :password, length: 10..71
+  validates :auth_token, uniqueness: true
 end

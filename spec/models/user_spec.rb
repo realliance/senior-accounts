@@ -45,4 +45,10 @@ RSpec.describe User, type: :model do
     user.password += 'a'
     expect(user).not_to be_valid
   end
+
+  it 'has a token after saving' do
+    user.save
+    user.reload
+    expect(user.auth_token).not_to be_nil
+  end
 end
