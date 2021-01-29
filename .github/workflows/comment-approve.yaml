@@ -1,12 +1,12 @@
 ---
-name: Bypass Auto Approval
+name: Comment Auto Approval
 # yamllint disable-line rule:truthy
 on:
   pull_request_target:
     branches: [main]
 jobs:
-  bypass-approve:
-    runs-on: self-hosted
+  comment-approve:
+    runs-on: ubuntu-latest
     steps:
       - uses: khan/pull-request-comment-trigger@1.0.0
         if: github.actor == 'ConnorJC3'
