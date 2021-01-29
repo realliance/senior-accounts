@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.create(create_params)
     if @user.save
       render status: :created, action: :show
-      # send confirmation email with token
+      UserMailer.account_activation(@user).deliver_now
     else
       render status: :bad_request, json: @user.errors
     end
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 
   def create_session
     @user = User.find_by(email: params[:email])
-    if @user&.authenticate(params[:password])&.activated
+    if @user&.authenticate(params[:password]) && @user&.activated
       render json: { token: @user.auth_token }
     elsif @user&.authenticate(params[:password])
       render json: { error: 'Please activate your account by following the instructions in the account confirmation email you received to proceed.' }
