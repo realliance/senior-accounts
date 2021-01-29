@@ -8,7 +8,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   let(:invalid_attributes) do
-    attributes_for(:user, password: 'a', password_confirmation: 'a')
+    attributes_for(:user, password: 'a')
   end
 
   describe 'POST #create' do
@@ -57,7 +57,7 @@ RSpec.describe UsersController, type: :request do
 
     context 'with invalid credentials' do
       it 'renders a bad request response' do
-        post session_url, params: { email: valid_attributes[:email], password: "a#{valid_attributes[:password]}" }, as: :json
+        post session_url, params: { email: user.email, password: "a#{valid_attributes[:password]}" }, as: :json
         expect(response).to have_http_status(:bad_request)
       end
     end
@@ -106,7 +106,7 @@ RSpec.describe UsersController, type: :request do
     describe 'PATCH #update' do
       context 'with valid parameters' do
         let(:new_attributes) do
-          { password: 'devise_sucks', password_confirmation: 'devise_sucks' }
+          { password: 'devise_sucks' }
         end
 
         it 'updates the requested user' do

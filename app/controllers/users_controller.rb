@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
   def create_session
     @user = User.find_by(email: params[:email])
-    if @user&.validate(params[:password])
+    if @user&.authenticate(params[:password])
       render json: { token: @user.auth_token }
     else
       head :bad_request
@@ -42,10 +42,10 @@ class UsersController < ApplicationController
   private
 
   def create_params
-    params.require(:user).permit(:email, :username, :password, :password_confirmation)
+    params.require(:user).permit(:email, :username, :password)
   end
 
   def update_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.require(:user).permit(:password)
   end
 end

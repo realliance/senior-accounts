@@ -37,18 +37,11 @@ RSpec.describe User, type: :model do
 
   it 'is invalid with a short password' do
     user.password = 'a' * 9
-    user.password_confirmation = 'a' * 9
     expect(user).not_to be_valid
   end
 
   it 'is invalid with a long password' do
     user.password = 'a' * 73
-    user.password_confirmation = 'a' * 73
-    expect(user).not_to be_valid
-  end
-
-  it 'is invalid with a mismatched password' do
-    user.password += 'a'
     expect(user).not_to be_valid
   end
 
