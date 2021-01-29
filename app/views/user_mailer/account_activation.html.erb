@@ -1,0 +1,10 @@
+<h1>Spellclash</h1>
+
+<p>Hi <%= @user.username %>,</p>
+
+<p>
+Click on the link below to activate your account:
+</p>
+
+<%= link_to "Activate", edit_account_activation_url(@user.email_confirmation_token,
+                                                    email: @user.email) %>
