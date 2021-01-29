@@ -50,4 +50,10 @@ RSpec.describe User, type: :model do
     user.reload
     expect(user.auth_token).not_to be_nil
   end
+
+  it 'has a confirmation token after saving' do
+    user.save
+    user.reload
+    expect(user.email_confirmation_token).not_to be_nil
+  end
 end

@@ -16,6 +16,12 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :auth_token
       t.index :auth_token, unique: true
 
+      t.string :email_confirmation_token
+      t.index :email_confirmation_token, unique: true
+
+      t.boolean :activated, default: false
+      t.index :activated
+
       t.timestamps
     end
   end
