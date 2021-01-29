@@ -44,7 +44,7 @@ group :development, :test do
   # Use ffaker to generate fake data for unit testing
   gem 'ffaker', '2.17.0'
   # Use rubocop for linting
-  gem 'rubocop', '1.8.1', require: false
+  gem 'rubocop', '1.9.0', require: false
   gem 'rubocop-rails', '2.9.1', require: false
   gem 'rubocop-rspec', '2.1.0', require: false
   # Use simplecov for test coverage viewing
