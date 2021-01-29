@@ -3,7 +3,7 @@
 <p>Hi <%= @user.username %>,</p>
 
 <p>
-Click on the link below to activate your account:
+Click on the link below to confirm your email:
 </p>
 
-<%= link_to "Activate", activate_url(@user.email_confirmation_token) %>
+<%= link_to "Confirm", activate_url(@user.email_confirmation_token) %>

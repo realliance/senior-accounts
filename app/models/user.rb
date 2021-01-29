@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_secure_token :email_confirmation_token
 
   validates :email, presence: true, uniqueness: true, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :unconfirmed_email, presence: true, uniqueness: true, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :username, presence: true, uniqueness: true, length: 3..100
   validates :password, length: 10..72, allow_blank: true
   validates :auth_token, uniqueness: true

@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 2021_01_28_011516) do
   create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
     t.string "username", null: false
     t.string "email", null: false
+    t.string "unconfirmed_email"
     t.string "password_digest"
     t.string "auth_token"
     t.string "email_confirmation_token"
@@ -25,6 +26,7 @@ ActiveRecord::Schema.define(version: 2021_01_28_011516) do
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["email_confirmation_token"], name: "index_users_on_email_confirmation_token", unique: true
+    t.index ["unconfirmed_email"], name: "index_users_on_unconfirmed_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 

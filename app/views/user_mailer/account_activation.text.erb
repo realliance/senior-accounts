@@ -2,6 +2,6 @@ User
 
 Hi <%= @user.username %>,
 
-Click on the link below to activate your account:
+Click on the link below to confirm your email:
 
 <%= activate_url(@user.email_confirmation_token) %>
