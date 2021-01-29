@@ -8,10 +8,11 @@
     "docker:pinDigests",
     ":rebaseStalePrs",
     ":automergeMinor",
-    ":automergeDigest"
+    ":automergeDigest",
+    ":pinSkipCi"
   ],
   "kubernetes": {
     "fileMatch": ["deploy/.+\\.yaml$"],
-    "commitMessagePrefix": "[ci skip] "
+    "commitBody": "[skip ci]"
   }
 }
