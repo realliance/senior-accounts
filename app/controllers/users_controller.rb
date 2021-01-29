@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :check_token, only: %i[create create_session]
+  skip_before_action :check_token, only: %i[create activate create_session]
 
   def create
     @user = User.create(create_params)
@@ -10,6 +10,16 @@ class UsersController < ApplicationController
       UserMailer.account_activation(@user).deliver_now
     else
       render status: :bad_request, json: @user.errors
+    end
+  end
+
+  def activate
+    @user = User.find_by(email_confirmation_token: params[:email_confirmation_token])
+    if @user && !@user.activated
+      @user.update(activated: true)
+      render json: { success: 'Email confirmed successfully' }
+    else
+      render json: { error: 'Failed to confirm email' }
     end
   end
 

@@ -6,5 +6,4 @@
 Click on the link below to activate your account:
 </p>
 
-<%= link_to "Activate", edit_account_activation_url(@user.email_confirmation_token,
-                                                    email: @user.email) %>
+<%= link_to "Activate", activate_url(@user.email_confirmation_token) %>
