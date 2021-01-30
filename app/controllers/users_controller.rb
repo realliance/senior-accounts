@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.create(create_params)
     if @user.save
       render status: :created, action: :show
-      UserMailer.email_confirmation(@user, @user.email).deliver_now
+      UserMailer.email_confirmation(@user, @user.email).deliver_later
     else
       render status: :bad_request, json: @user.errors
     end
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
       render :show
       if params[:unconfirmed_email].present?
         @user.regenerate_email_confirmation_token
-        UserMailer.email_confirmation(@user, @user.unconfirmed_email).deliver_now
+        UserMailer.email_confirmation(@user, @user.unconfirmed_email).deliver_later
       end
     else
       render status: :bad_request, json: current_user.errors

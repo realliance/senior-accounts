@@ -19,6 +19,12 @@ RSpec.describe UsersController, type: :request do
         end.to change(User, :count).by(1)
       end
 
+      it 'enqueues email to be delivered later' do
+        assert_enqueued_jobs 1 do
+          post user_url, params: { user: valid_attributes }, as: :json
+        end
+      end
+
       it 'renders a JSON response with the new user' do
         post user_url, params: { user: valid_attributes }, as: :json
         expect(response).to have_http_status(:created)
