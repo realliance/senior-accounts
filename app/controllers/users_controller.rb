@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     elsif @user&.authenticate(params[:password])
       render status: :bad_request, json: { error: 'Please activate your account by following the instructions in the account confirmation email you received to proceed.' }
     else
-      head :bad_request
+      render status: :bad_request, json: { error: 'Invalid email or password.' }
     end
   end
 
