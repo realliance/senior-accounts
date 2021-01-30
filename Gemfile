@@ -55,6 +55,7 @@ end
 
 group :development do
   # Use spring for development speed up
+  gem 'letter_opener', '1.7'
   gem 'spring', '2.1.1'
 end
 
