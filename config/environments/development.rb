@@ -34,8 +34,13 @@ Rails.application.configure do
 
   # Care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
+
+  # Preview email in the default browser instead of sending it.
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  # When enqueuing jobs with the Inline adapter the job will be executed immediately.
+  config.active_job.queue_adapter = :inline
 
   config.action_mailer.perform_caching = false
 
