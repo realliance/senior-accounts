@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :check_token, only: %i[create activate create_session]
+  skip_before_action :check_token, only: %i[create confirm_email create_session]
 
   def create
     @user = User.create(create_params)
     if @user.save
       render status: :created, action: :show
-      UserMailer.account_activation(@user, @user.email).deliver_now
+      UserMailer.email_confirmation(@user, @user.email).deliver_now
     else
       render status: :bad_request, json: @user.errors
     end
   end
 
-  def activate
+  def confirm_email
     @user = User.find_by(email_confirmation_token: params[:email_confirmation_token])
     if @user && !@user.activated
       @user.update(activated: true)
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
       render :show
       if params[:unconfirmed_email].present?
         @user.regenerate_email_confirmation_token
-        UserMailer.account_activation(@user, @user.unconfirmed_email).deliver_now
+        UserMailer.email_confirmation(@user, @user.unconfirmed_email).deliver_now
       end
     else
       render status: :bad_request, json: current_user.errors

@@ -27,5 +27,13 @@ RSpec.describe UsersController, type: :routing do
     it 'routes to #destroy_session via DELETE' do
       expect(delete: '/session').to route_to('users#destroy_session')
     end
+
+    it 'routes to #confirm via GET' do
+      expect(get: '/confirm/token').to route_to(
+        controller: 'users',
+        action: 'confirm_email',
+        email_confirmation_token: 'token'
+      )
+    end
   end
 end

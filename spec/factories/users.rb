@@ -6,5 +6,6 @@ FactoryBot.define do
     email { FFaker::Internet.safe_email(username) }
     password { FFaker::Internet.password(10, 72) }
     sequence(:activated) { true }
+    sequence(:email_confirmation_token) { 'token' }
   end
 end
