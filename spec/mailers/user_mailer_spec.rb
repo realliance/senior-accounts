@@ -6,11 +6,11 @@ RSpec.describe UserMailer, type: :mailer do
   let(:user) { build(:user) }
 
   describe 'email_confirmation' do
-    let(:mail) { described_class.email_confirmation(user, user.email) }
+    let(:mail) { described_class.email_confirmation(user, user.unconfirmed_email) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Wizard Connect 3: Email Confirmation')
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([user.unconfirmed_email])
       expect(mail.from).to eq(['from@example.com'])
     end
 

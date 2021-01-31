@@ -54,7 +54,7 @@ RSpec.describe UsersController, type: :request do
 
     context 'with valid credentials' do
       it 'returns a token' do
-        post session_url, params: { email: user.email, password: valid_attributes[:password] }, as: :json
+        post session_url, params: { username: user.username, password: valid_attributes[:password] }, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
         expect(response.body).to eq({ token: user.auth_token }.to_json)
@@ -112,13 +112,13 @@ RSpec.describe UsersController, type: :request do
     describe 'PATCH #update' do
       context 'with valid parameters' do
         let(:new_attributes) do
-          { password: 'devise_sucks' }
+          { email: 'devise_sucks@gmail.com' }
         end
 
         it 'updates the requested user' do
           patch user_url, params: { user: new_attributes }, headers: valid_headers, as: :json
           user.reload
-          expect(user.authenticate('devise_sucks')).to be_truthy
+          expect(user.unconfirmed_email).to equal('devise_sucks@gmail.com')
         end
 
         it 'renders a JSON response with the user' do

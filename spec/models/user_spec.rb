@@ -9,11 +9,6 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
-  it 'is invalid with no email' do
-    user.email = nil
-    expect(user).not_to be_valid
-  end
-
   it 'is invalid with incorrect email format' do
     user.email = 'fail@'
     expect(user).not_to be_valid
