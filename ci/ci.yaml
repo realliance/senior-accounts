@@ -61,6 +61,7 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+                  path: .
               caches:
                 - path: vendor
               run:
@@ -68,8 +69,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    cd pull-request
-                    bundle config set --local path '../vendor'
+                    bundle config set --local path './vendor'
                     bundle install
                     bundle exec rubocop
           - task: rspec
@@ -78,6 +78,7 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+                  path: .
               outputs:
                 - name: coverage
                   path: pull-request/coverage
@@ -88,8 +89,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    cd pull-request
-                    bundle config set --local path '../vendor'
+                    bundle config set --local path './vendor'
                     bundle install
                     bundle exec rails spec
           - task: database-consistency
@@ -98,6 +98,7 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+                  path: .
               caches:
                 - path: vendor
               run:
@@ -105,8 +106,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    cd pull-request
-                    bundle config set --local path '../vendor'
+                    bundle config set --local path './vendor'
                     bundle install
                     bundle exec database_consistency
           - task: yamllint
@@ -115,6 +115,7 @@ jobs:
               platform: linux
               inputs:
                 - name: pull-request
+                  path: .
               caches:
                 - path: cache
               run:
@@ -122,8 +123,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    cd pull-request
-                    pip install --cache-dir ../cache yamllint
+                    pip install --cache-dir ./cache yamllint
                     yamllint .
         on_failure:
           put: pull-request
