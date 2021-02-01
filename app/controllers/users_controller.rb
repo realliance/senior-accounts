@@ -11,9 +11,8 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
     if @user.save
       render status: :created, action: :show
-      UserMailer.email_confirmation(@user, @user.unconfirmed_email).deliver_later
     else
-      render status: :bad_request, json: @user.errors.tap { |e| e[:email] = e.delete(:unconfirmed_email) }
+      render status: :bad_request, json: @user.errors.add(:email, @user.errors.delete(:unconfirmed_email))
     end
   end
 
@@ -22,7 +21,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render status: :ok, action: :show
     else
-      render status: :bad_request, json: @user.errors.tap { |e| e[:email] = e.delete(:unconfirmed_email) }
+      render status: :bad_request, json: @user.errors.add(:email, @user.errors.delete(:unconfirmed_email))
     end
   end
 

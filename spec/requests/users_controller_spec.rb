@@ -8,7 +8,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   let(:invalid_attributes) do
-    attributes_for(:user, password: 'a')
+    attributes_for(:user, email: 'a')
   end
 
   describe 'POST #create' do
@@ -69,6 +69,30 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
+  describe 'GET #confirm_email' do
+    let(:user) do
+      create(:unconfirmed_user)
+    end
+
+    context 'with valid email confirmation token' do
+      it 'confirms email' do
+        get confirm_email_url(email_confirmation_token: user.email_confirmation_token)
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.body).to match(a_string_including('Email confirmed successfully'))
+      end
+    end
+
+    context 'with invalid email confirmation token' do
+      it 'renders a bad request response' do
+        get confirm_email_url(email_confirmation_token: 'invalid_token')
+        expect(response).to have_http_status(:bad_request)
+        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.body).to match(a_string_including('Invalid request'))
+      end
+    end
+  end
+
   context 'when logged out' do
     describe 'GET #show' do
       it 'renders an unauthorized response' do
@@ -112,13 +136,14 @@ RSpec.describe UsersController, type: :request do
     describe 'PATCH #update' do
       context 'with valid parameters' do
         let(:new_attributes) do
-          { email: 'devise_sucks@gmail.com' }
+          attributes_for(:user, email: 'devise_sucks@gmail.com', password: 'devise_sucks')
         end
 
         it 'updates the requested user' do
           patch user_url, params: { user: new_attributes }, headers: valid_headers, as: :json
           user.reload
-          expect(user.unconfirmed_email).to equal('devise_sucks@gmail.com')
+          expect(user.authenticate('devise_sucks')).to be_truthy
+          expect(user.unconfirmed_email).to eq('devise_sucks@gmail.com')
         end
 
         it 'renders a JSON response with the user' do

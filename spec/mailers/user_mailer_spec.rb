@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe UserMailer, type: :mailer do
-  let(:user) { build(:user) }
+  let(:user) { build(:unconfirmed_user) }
 
   describe 'email_confirmation' do
     let(:mail) { described_class.email_confirmation(user, user.unconfirmed_email) }
@@ -18,7 +18,7 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.body.encoded).not_to be_empty
     end
 
-    it 'assigns @name' do
+    it 'assigns @username' do
       expect(mail.body.encoded).to match(user.username)
     end
 
