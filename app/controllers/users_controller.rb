@@ -37,7 +37,6 @@ class UsersController < ApplicationController
 
   def create_session
     @user = User.find_by(username: params[:username])
-
     if @user&.authenticate(params[:password])
       render status: :ok, json: { token: @user.auth_token }
     else

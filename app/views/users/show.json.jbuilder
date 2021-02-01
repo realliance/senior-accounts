@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
 json.id @user.id.to_s
-json.extract! @user, :email, :username, :unconfirmed_email
+json.extract! @user, :email, :username
