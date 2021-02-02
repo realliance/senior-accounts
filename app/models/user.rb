@@ -4,8 +4,7 @@ class User < ApplicationRecord
   has_secure_password
   has_secure_token :auth_token
   has_secure_token :email_confirmation_token
-  after_create :send_confirmation_email
-  after_update :send_confirmation_email, if: :unconfirmed_email_changed?
+  after_commit :send_confirmation_email, only: %i[create update], if: -> { saved_change_to_unconfirmed_email? && !unconfirmed_email.nil? }
 
   validates :email, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :unconfirmed_email, exclusion: { in: ->(u) { [u.email] } }, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true

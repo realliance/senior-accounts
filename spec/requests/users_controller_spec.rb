@@ -77,6 +77,14 @@ RSpec.describe UsersController, type: :request do
     context 'with valid email confirmation token' do
       it 'confirms email' do
         get confirm_email_url(email_confirmation_token: user.email_confirmation_token)
+        email = user.unconfirmed_email
+        user.reload
+        expect(user.email).to eq(email)
+        expect(user.unconfirmed_email).to be_nil
+      end
+
+      it 'renders a JSON response with email confirmation' do
+        get confirm_email_url(email_confirmation_token: user.email_confirmation_token)
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
         expect(response.body).to match(a_string_including('Email confirmed successfully'))
@@ -84,6 +92,13 @@ RSpec.describe UsersController, type: :request do
     end
 
     context 'with invalid email confirmation token' do
+      it 'does not confirm email' do
+        get confirm_email_url(email_confirmation_token: 'invalid_token')
+        email = user.unconfirmed_email
+        user.reload
+        expect(user.email).not_to eq(email)
+      end
+
       it 'renders a bad request response' do
         get confirm_email_url(email_confirmation_token: 'invalid_token')
         expect(response).to have_http_status(:bad_request)
@@ -137,6 +152,12 @@ RSpec.describe UsersController, type: :request do
       context 'with valid parameters' do
         let(:new_attributes) do
           attributes_for(:user, email: 'devise_sucks@gmail.com', password: 'devise_sucks')
+        end
+
+        it 'enqueues email to be delivered later' do
+          assert_enqueued_jobs 1 do
+            patch user_url, params: { user: valid_attributes }, headers: valid_headers, as: :json
+          end
         end
 
         it 'updates the requested user' do
