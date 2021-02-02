@@ -31,7 +31,7 @@ class UsersController < ApplicationController
       @user.update(email: @user.unconfirmed_email, unconfirmed_email: nil, email_confirmation_token: nil)
       render status: :ok, json: { success: 'Email confirmed successfully' }
     else
-      render status: :bad_request, json: { error: 'Invalid request' }
+      head :bad_request
     end
   end
 

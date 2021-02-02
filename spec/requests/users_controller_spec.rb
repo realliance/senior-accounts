@@ -13,6 +13,10 @@ RSpec.describe UsersController, type: :request do
 
   describe 'POST #create' do
     context 'with valid parameters' do
+      let(:user) do
+        create(:unconfirmed_user)
+      end
+
       it 'creates a new User' do
         expect do
           post user_url, params: { user: valid_attributes }, as: :json
@@ -20,9 +24,9 @@ RSpec.describe UsersController, type: :request do
       end
 
       it 'enqueues email to be delivered later' do
-        assert_enqueued_jobs 1 do
+        expect do
           post user_url, params: { user: valid_attributes }, as: :json
-        end
+        end.to have_enqueued_mail(UserMailer, :email_confirmation)
       end
 
       it 'renders a JSON response with the new user' do
@@ -102,8 +106,6 @@ RSpec.describe UsersController, type: :request do
       it 'renders a bad request response' do
         get confirm_email_url(email_confirmation_token: 'invalid_token')
         expect(response).to have_http_status(:bad_request)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('Invalid request'))
       end
     end
   end
@@ -155,16 +157,16 @@ RSpec.describe UsersController, type: :request do
         end
 
         it 'enqueues email to be delivered later' do
-          assert_enqueued_jobs 1 do
+          expect do
             patch user_url, params: { user: valid_attributes }, headers: valid_headers, as: :json
-          end
+          end.to have_enqueued_mail(UserMailer, :email_confirmation)
         end
 
         it 'updates the requested user' do
           patch user_url, params: { user: new_attributes }, headers: valid_headers, as: :json
           user.reload
-          expect(user.authenticate('devise_sucks')).to be_truthy
-          expect(user.unconfirmed_email).to eq('devise_sucks@gmail.com')
+          expect(user.authenticate(new_attributes[:password])).to be_truthy
+          expect(user.unconfirmed_email).to eq(new_attributes[:email])
         end
 
         it 'renders a JSON response with the user' do
