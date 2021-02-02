@@ -49,7 +49,7 @@ group :development, :test do
   # Use rubocop for linting
   gem 'rubocop', '1.9.1', require: false
   gem 'rubocop-rails', '2.9.1', require: false
-  gem 'rubocop-rspec', '2.1.0', require: false
+  gem 'rubocop-rspec', '2.2.0', require: false
   # Use simplecov for test coverage viewing
   gem 'simplecov', '0.21.2', require: false
   # Maintain database consistency
