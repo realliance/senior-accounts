@@ -8,13 +8,17 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :username, null: false
       t.index :username, unique: true
 
-      t.string :email, null: false
-      t.index :email, unique: true
+      t.string :email
+
+      t.string :unconfirmed_email
 
       t.string :password_digest
 
       t.string :auth_token
       t.index :auth_token, unique: true
+
+      t.string :email_confirmation_token
+      t.index :email_confirmation_token, unique: true
 
       t.timestamps
     end

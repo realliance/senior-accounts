@@ -9,8 +9,13 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
-  it 'is invalid with no email' do
-    user.email = nil
+  it 'is invalid with incorrect email format' do
+    user.email = 'fail@'
+    expect(user).not_to be_valid
+  end
+
+  it 'is invalid with incorrect unconfirmed email format' do
+    user.unconfirmed_email = 'fail.com'
     expect(user).not_to be_valid
   end
 
@@ -45,9 +50,15 @@ RSpec.describe User, type: :model do
     expect(user).not_to be_valid
   end
 
-  it 'has a token after saving' do
+  it 'has an authentication token after saving' do
     user.save
     user.reload
     expect(user.auth_token).not_to be_nil
+  end
+
+  it 'has an email confirmation token after saving' do
+    user.save
+    user.reload
+    expect(user.email_confirmation_token).not_to be_nil
   end
 end

@@ -1,0 +1,9 @@
+<h1>Wizard Connect 3</h1>
+
+<p>Hi <%= @user.username %>,</p>
+
+<p>
+Click on the link below to confirm your email:
+</p>
+
+<%= link_to "Confirm", confirm_email_url(@user.email_confirmation_token) %>

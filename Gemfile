@@ -29,6 +29,9 @@ gem 'ksuid', '0.2.0'
 # Use CanCanCan for user authorization
 gem 'cancancan', '3.2.1'
 
+# Delayed::Job encapsulates the common pattern of asynchronously executing longer tasks in the background.
+gem 'delayed_job_active_record', '4.1.5'
+
 group :development, :test do
   # Use Puma as the app server
   gem 'puma', '5.2.0'
@@ -55,6 +58,7 @@ end
 
 group :development do
   # Use spring for development speed up
+  gem 'letter_opener', '1.7'
   gem 'spring', '2.1.1'
 end
 
