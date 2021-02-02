@@ -41,6 +41,11 @@ spec:
                 secretKeyRef:
                   name: rails-env
                   key: master-key
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: rails-env
+                  key: sentry-dsn
 ---
 apiVersion: v1
 kind: Service
