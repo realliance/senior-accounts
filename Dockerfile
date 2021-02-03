@@ -11,8 +11,10 @@ RUN bundle config set --local without 'development test' && \
 
 
 FROM docker.io/ruby:3.0-alpine@sha256:f2193eecf485fdd0d6e362af8d2b305fbbad58168f5d66770d15d88786a022e9
+ARG COMMIT
 WORKDIR /usr/src
 ENV RAILS_ENV production
+ENV COMMIT $COMMIT
 
 RUN apk add --no-cache --update postgresql-libs tzdata
 
