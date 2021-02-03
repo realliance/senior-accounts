@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
   def password_recovery
     @user = User.find_by(username: params[:username])
-    if @user&.email.nil?
+    if @user&.email.present?
       @user.regenerate_password_recovery_token
       UserMailer.password_recovery(@user).deliver_later
     end
@@ -61,7 +61,8 @@ class UsersController < ApplicationController
 
   def password_reset
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
-    render status: :ok, json: { success: 'Password reset successfully' } if @user&.update(password: params[:password], password_recovery_token: nil)
+    return render status: :ok, json: { success: 'Password reset successfully' } if @user&.update(password: params[:password], password_recovery_token: nil)
+
     head :bad_request
   end
 

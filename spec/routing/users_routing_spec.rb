@@ -28,11 +28,23 @@ RSpec.describe UsersController, type: :routing do
       expect(delete: '/session').to route_to('users#destroy_session')
     end
 
-    it 'routes to #confirm via GET' do
+    it 'routes to #confirm_email via GET' do
       expect(get: '/confirm/token').to route_to(
         controller: 'users',
         action: 'confirm_email',
         email_confirmation_token: 'token'
+      )
+    end
+
+    it 'routes to #password_recovery via POST' do
+      expect(post: '/password/recovery').to route_to('users#password_recovery')
+    end
+
+    it 'routes to #password_reset via GET' do
+      expect(get: '/password/token').to route_to(
+        controller: 'users',
+        action: 'password_reset',
+        password_recovery_token: 'token'
       )
     end
   end
