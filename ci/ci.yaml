@@ -156,6 +156,7 @@ jobs:
         params:
           SENTRY_ORG: ((sentry.org))
           SENTRY_AUTH_TOKEN: ((sentry.auth-token))
+          SENTRY_URL: ((sentry.url))
         config:
           platform: linux
           inputs:
@@ -199,6 +200,7 @@ jobs:
         params:
           SENTRY_ORG: ((sentry.org))
           SENTRY_AUTH_TOKEN: ((sentry.auth-token))
+          SENTRY_URL: ((sentry.url))
           VERSION: ((.:sentry-release))
         config:
           platform: linux
