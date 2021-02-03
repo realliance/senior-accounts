@@ -10,9 +10,5 @@
     ":automergeMinor",
     ":automergeDigest",
     ":pinSkipCi"
-  ],
-  "kubernetes": {
-    "fileMatch": ["deploy/.+\\.yaml$"],
-    "commitBody": "[skip ci]"
-  }
+  ]
 }
