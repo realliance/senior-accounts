@@ -12,6 +12,7 @@ class ApplicationController < ActionController::API
     @current_user = authenticate_or_request_with_http_token do |token|
       User.find_by(auth_token: token)
     end
+    Sentry.set_user(id: @user.id, email: @user.email, username: @user.username)
   end
 
   attr_reader :current_user
