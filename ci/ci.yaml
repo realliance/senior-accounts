@@ -42,6 +42,11 @@ resources:
     icon: docker
     source:
       repository: docker.io/vito/oci-build-task
+  - name: sentry-cli
+    type: registry-image
+    icon: docker
+    source:
+      repository: docker.io/getsentry/sentry-cli
 jobs:
   - name: validate-pr
     plan:
@@ -145,14 +150,36 @@ jobs:
       - get: senior-accounts-main
         trigger: true
       - get: oci-build-task
-      - load_var: git-commit
-        file: senior-accounts-main/.git/ref
+      - get: sentry-cli
+      - task: sentry-new
+        image: sentry-cli
+        params:
+          SENTRY_ORG: ((sentry.org))
+          SENTRY_AUTH_TOKEN: ((sentry.auth-token))
+        config:
+          platform: linux
+          inputs:
+            - name: senior-accounts-main
+              path: .
+          outputs:
+            - name: release
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                VERSION=$(sentry-cli releases propose-version)
+                echo $VERSION > release/version.txt
+                sentry-cli releases new -p senior-accounts "$VERSION"
+                sentry-cli releases set-commits --auto "$VERSION"
+      - load_var: sentry-release
+        file: release/version.txt
         reveal: true
       - task: build
         privileged: true
         image: oci-build-task
         params:
-          BUILD_ARG_COMMIT: ((.:git-commit))
+          BUILD_ARG_RELEASE: ((.:sentry-release))
         config:
           platform: linux
           inputs:
@@ -167,3 +194,17 @@ jobs:
       - put: quay
         params:
           image: image/image.tar
+      - task: sentry-finalize
+        image: sentry-cli
+        params:
+          SENTRY_ORG: ((sentry.org))
+          SENTRY_AUTH_TOKEN: ((sentry.auth-token))
+          VERSION: ((.:sentry-release))
+        config:
+          platform: linux
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                sentry-cli releases finalize "$VERSION"
