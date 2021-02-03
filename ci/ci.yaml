@@ -145,9 +145,14 @@ jobs:
       - get: senior-accounts-main
         trigger: true
       - get: oci-build-task
+      - load_var: git-commit
+        file: senior-accounts-main/.git/ref
+        reveal: true
       - task: build
         privileged: true
         image: oci-build-task
+        params:
+          BUILD_ARGS_COMMIT: ((.:git-commit))
         config:
           platform: linux
           inputs:
