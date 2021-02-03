@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_01_064911) do
+ActiveRecord::Schema.define(version: 2021_02_03_072247) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -36,8 +36,10 @@ ActiveRecord::Schema.define(version: 2021_02_01_064911) do
     t.string "email_confirmation_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "password_recovery_token"
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["email_confirmation_token"], name: "index_users_on_email_confirmation_token", unique: true
+    t.index ["password_recovery_token"], name: "index_users_on_password_recovery_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
