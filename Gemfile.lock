@@ -276,8 +276,8 @@ DEPENDENCIES
   rubocop (= 1.9.1)
   rubocop-rails (= 2.9.1)
   rubocop-rspec (= 2.2.0)
-  sentry-rails
-  sentry-ruby
+  sentry-rails (= 4.1.7)
+  sentry-ruby (= 4.1.6)
   simplecov (= 0.21.2)
   spring (= 2.1.1)
   sqlite3 (= 1.4.2)
