@@ -149,7 +149,6 @@ RSpec.describe UsersController, type: :request do
       end
     end
   end
-  ########################################
 
   describe 'GET #password_reset' do
     let(:user) do
