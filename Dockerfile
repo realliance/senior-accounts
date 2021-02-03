@@ -29,4 +29,4 @@ RUN mkdir tmp && \
     chown 1000:1000 tmp
 
 EXPOSE 8080
-CMD ["./docker-start.sh"]
+CMD ["bundle", "exec", "unicorn", "-p", "8080", "-c", "./config/unicorn.rb"]
