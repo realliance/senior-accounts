@@ -4,7 +4,7 @@ ENV RAILS_ENV production
 
 RUN apk add --no-cache --update build-base postgresql-dev tzdata
 
-ADD Gemfile* .
+ADD Gemfile* ./
 RUN bundle config set --local without 'development test' && \
     bundle config set --local path './vendor' && \
     bundle install
@@ -19,7 +19,7 @@ ENV COMMIT $COMMIT
 RUN apk add --no-cache --update postgresql-libs tzdata
 
 COPY --from=builder /usr/src/vendor /usr/src/vendor
-ADD Gemfile* .
+ADD Gemfile* ./
 RUN bundle config set --local without 'development test' && \
     bundle config set --local path './vendor' && \
     bundle install
@@ -29,4 +29,4 @@ RUN mkdir tmp && \
     chown 1000:1000 tmp
 
 EXPOSE 8080
-CMD ["docker-start.sh"]
+CMD ["./docker-start.sh"]
