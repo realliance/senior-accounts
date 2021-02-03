@@ -52,9 +52,3 @@ repos:
         entry: renovate-config-validator
         language: system
         files: \.renovaterc\.json
-      - id: validate-deploy
-        name: Validate deploy manifests
-        entry: kubectl apply --dry-run=client -k deploy
-        language: system
-        pass_filenames: false
-        files: deploy/.*

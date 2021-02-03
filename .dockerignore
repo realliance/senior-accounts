@@ -16,7 +16,6 @@ CODEOWNERS
 
 # CI/CD
 ci
-deploy
 cache
 
 # Bundler config
