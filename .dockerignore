@@ -12,10 +12,12 @@ README.md
 .yamllint
 .database_consistency.yml
 .renovaterc.json
+CODEOWNERS
 
 # CI/CD
 ci
 deploy
+cache
 
 # Bundler config
 .bundle

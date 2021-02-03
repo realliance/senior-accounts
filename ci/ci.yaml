@@ -152,7 +152,7 @@ jobs:
         privileged: true
         image: oci-build-task
         params:
-          BUILD_ARGS_COMMIT: ((.:git-commit))
+          BUILD_ARG_COMMIT: ((.:git-commit))
         config:
           platform: linux
           inputs:
