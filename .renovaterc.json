@@ -9,6 +9,7 @@
     ":rebaseStalePrs",
     ":automergeMinor",
     ":automergeDigest",
-    ":pinSkipCi"
+    ":pinSkipCi",
+    "group:allNonMajor"
   ]
 }
