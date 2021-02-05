@@ -38,7 +38,7 @@ gem 'sentry-ruby', '4.2.0'
 
 group :development, :test do
   # Use Puma as the app server
-  gem 'puma', '5.2.0'
+  gem 'puma', '5.2.1'
   # Use sqlite3 as the development database
   gem 'sqlite3', '1.4.2'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
