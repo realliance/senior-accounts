@@ -156,12 +156,6 @@ RSpec.describe UsersController, type: :request do
     end
 
     context 'with valid password recovery token' do
-      it 'resets password' do
-        get password_reset_url(password_recovery_token: user.password_recovery_token, password: 'devise_sucks')
-        user.reload
-        expect(user.authenticate('devise_sucks')).to be_truthy
-      end
-
       it 'renders a success status response' do
         get password_reset_url(password_recovery_token: user.password_recovery_token, password: 'devise_sucks')
         expect(response).to have_http_status(:ok)
@@ -169,15 +163,39 @@ RSpec.describe UsersController, type: :request do
     end
 
     context 'with invalid password recovery token' do
-      it 'does not reset password' do
-        get password_reset_url(password_recovery_token: 'token', password: 'devise_sucks')
-        user.reload
-        expect(user.authenticate('devise_sucks')).not_to be_truthy
+      it 'renders a bad request response' do
+        get password_reset_url(password_recovery_token: 'token')
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
+  describe 'POST #password_update' do
+    let(:user) do
+      create(:user)
+    end
+
+    context 'with valid parameters' do
+      let(:valid_attributes) do
+        attributes_for(:user, password: 'devise_sucks', password_confirmation: 'devise_sucks')
       end
 
-      it 'renders a bad request response' do
-        get password_reset_url(password_recovery_token: 'token', password: 'devise_sucks')
-        expect(response).to have_http_status(:bad_request)
+      it 'resets password' do
+        post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: valid_attributes }, as: :json
+        user.reload
+        expect(user.authenticate('devise_sucks')).to be_truthy
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        attributes_for(:user, password: 'a', password_confirmation: 'a')
+      end
+
+      it 'does not reset password' do
+        post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: invalid_attributes }, as: :json
+        user.reload
+        expect(user.authenticate('a')).not_to be_truthy
       end
     end
   end

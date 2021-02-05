@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :check_token, only: %i[create confirm_email create_session password_recovery password_reset]
+  before_action :check_token, except: %i[create confirm_email create_session password_recovery password_reset password_update]
 
   def show
     @user = current_user
@@ -61,14 +61,25 @@ class UsersController < ApplicationController
 
   def password_reset
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
-    return render status: :ok, json: { success: 'Password reset successfully' } if @user&.update(password: params[:password], password_recovery_token: nil)
+    head :bad_request if @user.nil?
+  end
 
-    head :bad_request
+  def password_update
+    @user = User.find_by(password_recovery_token: params[:password_recovery_token])
+    if @user&.update(password_params)
+      render status: :ok, json: { success: 'Password reset successfully' }
+    else
+      render 'password_reset.html.erb'
+    end
   end
 
   private
 
   def user_params
     params.require(:user).tap { |p| p[:unconfirmed_email] = p[:email] }.permit(:unconfirmed_email, :username, :password)
+  end
+
+  def password_params
+    params.require(:user).tap { |p| p[:password_recovery_token] = nil }.permit(:password, :password_confirmation, :password_recovery_token)
   end
 end

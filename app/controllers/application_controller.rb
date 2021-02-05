@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  include ActionView::Layouts
 
   before_action :check_token
   helper_method :current_user
