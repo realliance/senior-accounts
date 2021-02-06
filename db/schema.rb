@@ -27,6 +27,16 @@ ActiveRecord::Schema.define(version: 2021_02_03_072247) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "friendships", id: { type: :binary, limit: 20 }, force: :cascade do |t|
+    t.binary "user_id", limit: 20
+    t.binary "friend_id", limit: 20
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
   create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
     t.string "username", null: false
     t.string "email"
@@ -43,4 +53,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_072247) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
 end
