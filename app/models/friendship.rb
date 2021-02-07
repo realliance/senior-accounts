@@ -28,14 +28,17 @@ class Friendship < ApplicationRecord
 
   def self.remove(user, friend)
     friendship = find_by(user_id: user.id, friend_id: friend.id)
-    friendship.destroy
-
     inverse_friendship = find_by(user_id: friend.id, friend_id: user.id)
+
+    return unless friendship && inverse_friendship
+
+    friendship.destroy
     inverse_friendship.destroy
   end
 
   def self.accept_request(user, friend)
-    request = find_by(user_id: user.id, friend_id: friend.id)
+    return unless (request = find_by(user_id: user.id, friend_id: friend.id))
+
     request.accepted!
   end
 end
