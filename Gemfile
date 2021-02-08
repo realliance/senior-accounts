@@ -15,7 +15,7 @@ gem 'rack-timeout', '0.6.0'
 # Use jbuilder for easier JSON API creation
 gem 'jbuilder', '2.11.2'
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '1.7.1', require: false
+gem 'bootsnap', '1.7.2', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors', '1.1.1'
 
