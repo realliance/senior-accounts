@@ -27,11 +27,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_072247) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "friendships", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
     t.string "username", null: false
     t.string "email"

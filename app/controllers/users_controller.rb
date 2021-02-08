@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :check_token, except: %i[create confirm_email create_session password_recovery password_reset password_update]
+  skip_before_action :check_token, except: %i[show update destroy_session]
 
   def show
     @user = current_user

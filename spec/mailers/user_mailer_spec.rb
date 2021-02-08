@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UserMailer, type: :mailer do
   describe 'email_confirmation' do
-    let(:user) { build(:unconfirmed_user) }
+    let(:user) { create(:unconfirmed_user) }
     let(:mail) { described_class.email_confirmation(user, user.unconfirmed_email) }
 
     it 'renders the headers' do
@@ -27,7 +27,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe 'password_recovery' do
-    let(:user) { build(:user) }
+    let(:user) { create(:user) }
     let(:mail) { described_class.password_recovery(user) }
 
     it 'renders the headers' do
