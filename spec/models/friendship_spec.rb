@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Friendship, type: :model do
-  let(:friendship) { build(:friendship) }
-  let(:user) { build(:user) }
-  let(:friend) { build(:user) }
+  let(:user) { create(:user) }
+  let(:friend) { create(:user) }
+  let(:friendship) { create(:friendship, user: user, friend: friend) }
 
   it 'is valid with valid attributes' do
     expect(friendship).to be_valid
@@ -36,10 +36,8 @@ RSpec.describe Friendship, type: :model do
   end
 
   it 'accepts a friend request' do
-    described_class.request(user, friend)
-    described_class.accept(user, friend)
+    described_class.accept(friendship.user, friendship.friend)
     expect(user.friendships.where(status: 'accepted').count).to eq(1)
-    expect(friend.friendships.where(status: 'accepted').count).to eq(1)
   end
 
   it 'declines a friend request' do
