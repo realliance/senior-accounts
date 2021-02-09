@@ -13,6 +13,7 @@ resources:
       repository: realliance/senior-accounts
       access_token: ((github-access-token))
       disable_ci_skip: true
+      disable_forks: true
   - name: senior-accounts-main
     type: git
     icon: git
@@ -134,7 +135,7 @@ jobs:
           - task: pre-commit
             image: python
             params:
-              SKIP: no-commit-to-branch,validate-pipeline,validate-pipeline,lint-apidocs
+              SKIP: no-commit-to-branch,validate-pipeline,renovate-config,lint-apidocs
             config:
               platform: linux
               inputs:
