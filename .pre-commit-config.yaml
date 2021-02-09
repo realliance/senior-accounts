@@ -29,19 +29,8 @@ repos:
     hooks:
       - id: yamllint
         name: Check YAML style with yamllint
-  - repo: https://github.com/mattlqx/pre-commit-ruby
-    rev: v1.3.3
-    hooks:
-      - id: rubocop
-        exclude: db/schema\.rb|vendor/.*|bin/.*|Gemfile\.lock
   - repo: local
     hooks:
-      - id: database-consistency
-        name: Check database consistency
-        entry: bundle exec database_consistency
-        language: system
-        pass_filenames: false
-        always_run: true
       - id: validate-pipeline
         name: Validate CI pipeline
         entry: fly validate-pipeline --config
@@ -49,6 +38,11 @@ repos:
         files: ci/.*
       - id: renovate-config
         name: Check renovate config
-        entry: renovate-config-validator
-        language: system
+        entry: --entrypoint=/bin/sh docker.io/renovate/renovate -c renovate-config-validator
+        language: docker_image
         files: \.renovaterc\.json
+      - id: lint-apidocs
+        name: Lint OpenAPI using spectral
+        entry: docker.io/stoplight/spectral lint -r
+        language: docker_image
+        files: apidocs/.*
