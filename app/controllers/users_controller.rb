@@ -61,15 +61,17 @@ class UsersController < ApplicationController
 
   def password_reset
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
-    head :bad_request if @user.nil?
+    render 'password_reset_error.html.erb', status: :bad_request if @user.nil?
   end
 
   def password_update
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
     if @user&.update(password_params)
-      render status: :ok, json: { success: 'Password reset successfully' }
-    else
+      render 'password_reset_confirmation.html.erb'
+    elsif @user
       render 'password_reset.html.erb'
+    else
+      render 'password_reset_error.html.erb', status: :bad_request
     end
   end
 

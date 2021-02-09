@@ -45,7 +45,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'assigns @password_reset_url' do
-      expect(mail.body.encoded).to match(a_string_including("/password/#{user.password_recovery_token}"))
+      expect(mail.body.encoded).to match(a_string_including("/password/reset/#{user.password_recovery_token}"))
     end
   end
 end
