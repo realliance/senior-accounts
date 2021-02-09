@@ -49,7 +49,7 @@ RSpec.describe UsersController, type: :routing do
     end
 
     it 'routes to #password_update via POST' do
-      expect(post: '/password/update/token').to route_to(
+      expect(post: '/password/reset/token').to route_to(
         controller: 'users',
         action: 'password_update',
         password_recovery_token: 'token'

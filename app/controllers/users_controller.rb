@@ -82,6 +82,6 @@ class UsersController < ApplicationController
   end
 
   def password_params
-    params.require(:user).tap { |p| p[:password_recovery_token] = nil }.permit(:password, :password_confirmation, :password_recovery_token)
+    params.require(:user).permit(:password, :password_confirmation).tap { |p| p[:password_recovery_token] = nil }
   end
 end
