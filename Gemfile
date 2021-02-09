@@ -15,7 +15,7 @@ gem 'rack-timeout', '0.6.0'
 # Use jbuilder for easier JSON API creation
 gem 'jbuilder', '2.11.2'
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '1.7.0', require: false
+gem 'bootsnap', '1.7.2', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors', '1.1.1'
 
@@ -33,12 +33,12 @@ gem 'cancancan', '3.2.1'
 gem 'delayed_job_active_record', '4.1.5'
 
 # Sentry
-gem 'sentry-rails', '4.1.7'
-gem 'sentry-ruby', '4.1.6'
+gem 'sentry-rails', '4.2.0'
+gem 'sentry-ruby', '4.2.1'
 
 group :development, :test do
   # Use Puma as the app server
-  gem 'puma', '5.2.0'
+  gem 'puma', '5.2.1'
   # Use sqlite3 as the development database
   gem 'sqlite3', '1.4.2'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
