@@ -13,6 +13,7 @@ resources:
       repository: realliance/senior-accounts
       access_token: ((github-access-token))
       disable_ci_skip: true
+      disable_forks: true
   - name: senior-accounts-main
     type: git
     icon: git
@@ -113,6 +114,7 @@ jobs:
                   - |
                     bundle config set --local path './vendor'
                     bundle install
+                    bundle exec rails db:migrate
                     bundle exec database_consistency
           - task: yamllint
             image: python
@@ -130,6 +132,24 @@ jobs:
                   - |
                     pip install --cache-dir ./cache yamllint
                     yamllint .
+          - task: pre-commit
+            image: python
+            params:
+              SKIP: no-commit-to-branch,validate-pipeline,renovate-config,lint-apidocs
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+                  path: .
+              caches:
+                - path: cache
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    pip install --cache-dir ./cache pre-commit
+                    pre-commit run --all-files
         on_failure:
           put: pull-request
           params:
