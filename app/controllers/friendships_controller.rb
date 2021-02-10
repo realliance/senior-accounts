@@ -2,6 +2,11 @@
 
 class FriendshipsController < ApplicationController
   before_action :check_token, :users
+  skip_before_action :users, only: %i[show]
+
+  def show
+    @user = current_user
+  end
 
   def create
     @friendship = Friendship.request(@user, @friend)

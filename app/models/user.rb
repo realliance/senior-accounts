@@ -8,7 +8,9 @@ class User < ApplicationRecord
   after_commit :send_confirmation_email, only: %i[create update], if: -> { saved_change_to_unconfirmed_email? && !unconfirmed_email.nil? }
 
   has_many :friendships, dependent: :destroy
-  has_many :friends, through: :friendships
+  has_many :friends, -> { where(friendships: { status: 'accepted' }) }, through: :friendships
+  has_many :requested_friends, -> { where(friendships: { status: 'requested' }) }, through: :friendships, source: :friend
+  has_many :pending_friends, -> { where(friendships: { status: 'pending' }) }, through: :friendships, source: :friend
   has_many :inverse_friendships, class_name: 'Friendship', foreign_key: 'friend_id', dependent: :destroy, inverse_of: :friendships
   has_many :inverse_friends, through: :inverse_friendships, source: :user
 

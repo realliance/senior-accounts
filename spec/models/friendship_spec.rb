@@ -32,26 +32,26 @@ RSpec.describe Friendship, type: :model do
 
   it 'sends a friend request' do
     described_class.request(user, friend)
-    expect(user.friends).to include(friend)
+    expect(user.pending_friends).to include(friend)
   end
 
   it 'accepts a friend request' do
     described_class.accept(friendship.user, friendship.friend)
-    expect(user.friendships.where(status: 'accepted').count).to eq(1)
+    expect(user.friends.count).to eq(1)
   end
 
   it 'declines a friend request' do
     described_class.request(user, friend)
     described_class.remove(user, friend)
-    expect(user.friendships.where(status: 'pending').count).to eq(0)
-    expect(friend.friendships.where(status: 'requested').count).to eq(0)
+    expect(user.pending_friends.count).to eq(0)
+    expect(friend.requested_friends.count).to eq(0)
   end
 
   it 'removes a friend' do
     described_class.request(user, friend)
     described_class.accept(user, friend)
     described_class.remove(user, friend)
-    expect(user.friendships.where(status: 'accepted').count).to eq(0)
-    expect(friend.friendships.where(status: 'accepted').count).to eq(0)
+    expect(user.friends.count).to eq(0)
+    expect(friend.friends.count).to eq(0)
   end
 end
