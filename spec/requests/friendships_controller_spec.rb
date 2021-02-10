@@ -46,10 +46,9 @@ RSpec.describe FriendshipsController, type: :request do
     describe 'POST #create' do
       it 'sends a friend request' do
         post friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
-        expect(user.friends).to include(friend)
         expect(response.body).to match(a_string_including('Friend request has been sent.'))
-        expect(user.friendships.where(status: 'pending').count).to eq(1)
-        expect(friend.friendships.where(status: 'requested').count).to eq(1)
+        expect(user.pending_friends).to include(friend)
+        expect(friend.requested_friends).to include(user)
       end
     end
 
@@ -70,23 +69,31 @@ RSpec.describe FriendshipsController, type: :request do
         Friendship.request(user, friend)
         put friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been accepted.'))
-        expect(user.friendships.where(status: 'accepted').count).to eq(1)
-        expect(friend.friendships.where(status: 'accepted').count).to eq(1)
+        expect(user.friends).to include(friend)
+        expect(friend.friends).to include(user)
       end
 
       it 'fails to accept a nonexistent friend request  ' do
         put friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request could not be accepted.'))
-        expect(user.friendships.where(status: 'accepted').count).to eq(0)
-        expect(friend.friendships.where(status: 'accepted').count).to eq(0)
+        expect(user.friends).not_to include(friend)
+        expect(friend.friends).not_to include(user)
       end
     end
 
     describe 'DELETE #destroy' do
-      it 'removes a friendship' do
+      it 'removes a friendship request' do
         Friendship.request(user, friend)
         delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend has been removed.'))
+        expect(user.pending_friends).not_to include(friend)
+        expect(friend.requested_friends).not_to include(user)
+      end
+
+      it 'removes a friendship' do
+        Friendship.request(user, friend)
+        Friendship.accept(user, friend)
+        delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(user.friends).not_to include(friend)
         expect(friend.friends).not_to include(user)
       end
