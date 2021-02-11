@@ -110,6 +110,96 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
+  describe 'POST #password_recovery' do
+    context 'with valid parameters' do
+      let(:user) do
+        create(:user)
+      end
+
+      it 'enqueues password recovery email to be delivered later' do
+        expect do
+          post password_recovery_url, params: { username: user.username }, as: :json
+        end.to have_enqueued_mail(UserMailer, :password_recovery)
+      end
+
+      it 'renders a JSON with password recovery information' do
+        post password_recovery_url, params: { username: user.username }, as: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:user) do
+        create(:unconfirmed_user)
+      end
+
+      it 'does not send a password recovery email' do
+        expect do
+          post password_recovery_url, params: { username: user.username }, as: :json
+        end.not_to have_enqueued_mail(UserMailer, :password_recovery)
+      end
+
+      it 'renders a JSON with password recovery information' do
+        post password_recovery_url, params: { username: user.username }, as: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to match(a_string_including('application/json'))
+        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
+      end
+    end
+  end
+
+  describe 'GET #password_reset' do
+    let(:user) do
+      create(:user)
+    end
+
+    context 'with valid password recovery token' do
+      it 'renders a success status response' do
+        get password_reset_url(password_recovery_token: user.password_recovery_token, password: 'devise_sucks')
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'with invalid password recovery token' do
+      it 'renders a bad request response' do
+        get password_reset_url(password_recovery_token: 'token')
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
+  describe 'POST #password_update' do
+    let(:user) do
+      create(:user)
+    end
+
+    context 'with valid parameters' do
+      let(:valid_attributes) do
+        attributes_for(:user, password: 'devise_sucks', password_confirmation: 'devise_sucks')
+      end
+
+      it 'resets password' do
+        post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: valid_attributes }, as: :json
+        user.reload
+        expect(user.authenticate('devise_sucks')).to be_truthy
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        attributes_for(:user, password: 'a', password_confirmation: 'a')
+      end
+
+      it 'does not reset password' do
+        post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: invalid_attributes }, as: :json
+        user.reload
+        expect(user.authenticate('a')).not_to be_truthy
+      end
+    end
+  end
+
   context 'when logged out' do
     describe 'GET #show' do
       it 'renders an unauthorized response' do
