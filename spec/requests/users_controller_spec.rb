@@ -87,11 +87,9 @@ RSpec.describe UsersController, type: :request do
         expect(user.unconfirmed_email).to be_nil
       end
 
-      it 'renders a JSON response with email confirmation' do
+      it 'renders a success status response' do
         get confirm_email_url(email_confirmation_token: user.email_confirmation_token)
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('Email confirmed successfully'))
       end
     end
 
