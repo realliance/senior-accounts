@@ -30,9 +30,9 @@ class UsersController < ApplicationController
   def confirm_email
     @user = User.find_by(email_confirmation_token: params[:email_confirmation_token])
     if @user&.update(email: @user.unconfirmed_email, unconfirmed_email: nil, email_confirmation_token: nil)
-      render status: :ok, json: { success: 'Email confirmed successfully' }
+      render :email_confirmation, formats: [:html]
     else
-      head :bad_request
+      render :error, formats: [:html], locals: { title: 'Email Confirmation' }, status: :bad_request
     end
   end
 
@@ -61,17 +61,17 @@ class UsersController < ApplicationController
 
   def password_reset
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
-    render 'password_reset_error.html.erb', status: :bad_request if @user.nil?
+    render :error, formats: [:html], locals: { title: 'Reset Password' }, status: :bad_request if @user.nil?
   end
 
   def password_update
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
     if @user&.update(password_params)
-      render 'password_reset_confirmation.html.erb'
+      render :password_reset_confirmation, formats: [:html]
     elsif @user
-      render 'password_reset.html.erb'
+      render :password_reset, formats: [:html]
     else
-      render 'password_reset_error.html.erb', status: :bad_request
+      render :error, formats: [:html], locals: { title: 'Reset Password' }, status: :bad_request
     end
   end
 
