@@ -8,7 +8,7 @@ resources:
   - name: pull-request
     type: pull-request
     icon: source-branch
-    check_every: 1m
+    webhook_token: ((webhook-token))
     source:
       repository: realliance/senior-accounts
       access_token: ((github-access-token))
@@ -17,6 +17,7 @@ resources:
   - name: senior-accounts-main
     type: git
     icon: git
+    webhook_token: ((webhook-token))
     source:
       uri: https://github.com/realliance/senior-accounts
       branch: main
