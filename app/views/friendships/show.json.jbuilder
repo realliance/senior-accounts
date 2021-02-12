@@ -10,7 +10,3 @@ end
 json.pending_friends do
   json.array! @user.pending_friends, :username
 end
-
-json.requested_friends do
-  json.array! @user.requested_friends, :username
-end

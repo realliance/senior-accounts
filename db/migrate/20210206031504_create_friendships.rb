@@ -7,7 +7,6 @@ class CreateFriendships < ActiveRecord::Migration[6.1]
 
       t.references :user, foreign_key: true, type: 'blob(20)'
       t.references :friend, foreign_key: false, type: 'blob(20)'
-
       t.column :status, :integer
 
       t.timestamps
