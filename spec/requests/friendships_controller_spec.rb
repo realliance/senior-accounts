@@ -40,6 +40,10 @@ RSpec.describe FriendshipsController, type: :request do
       { authorization: "Token #{user.auth_token}" }
     end
 
+    let(:valid_headers_friend) do
+      { authorization: "Token #{friend.auth_token}" }
+    end
+
     let(:user) { create(:user) }
     let(:friend) { create(:user) }
 
@@ -48,7 +52,6 @@ RSpec.describe FriendshipsController, type: :request do
         post friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been sent.'))
         expect(user.pending_friends).to include(friend)
-        expect(friend.requested_friends).to include(user)
       end
     end
 
@@ -66,10 +69,9 @@ RSpec.describe FriendshipsController, type: :request do
 
     describe 'PUT #update' do
       it 'accepts a friend request' do
-        Friendship.request(user, friend)
+        Friendship.request(friend, user)
         put friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been accepted.'))
-        expect(user.friends).to include(friend)
         expect(friend.friends).to include(user)
       end
 
@@ -87,15 +89,12 @@ RSpec.describe FriendshipsController, type: :request do
         delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend has been removed.'))
         expect(user.pending_friends).not_to include(friend)
-        expect(friend.requested_friends).not_to include(user)
       end
 
       it 'removes a friendship' do
-        Friendship.request(user, friend)
-        Friendship.accept(user, friend)
+        Friendship.create(user: user, friend: friend, status: 'accepted')
         delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(user.friends).not_to include(friend)
-        expect(friend.friends).not_to include(user)
       end
 
       it 'fails to remove a nonexistent friend' do

@@ -9,10 +9,7 @@ class User < ApplicationRecord
 
   has_many :friendships, dependent: :destroy
   has_many :friends, -> { where(friendships: { status: 'accepted' }) }, through: :friendships
-  has_many :requested_friends, -> { where(friendships: { status: 'requested' }) }, through: :friendships, source: :friend
   has_many :pending_friends, -> { where(friendships: { status: 'pending' }) }, through: :friendships, source: :friend
-  has_many :inverse_friendships, class_name: 'Friendship', foreign_key: 'friend_id', dependent: :destroy, inverse_of: :friendships
-  has_many :inverse_friends, through: :inverse_friendships, source: :user
 
   validates :email, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :unconfirmed_email, exclusion: { in: ->(u) { [u.email] } }, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
