@@ -76,8 +76,8 @@ jobs:
                 args:
                   - -exc
                   - |
-                    bundle config set --local path './vendor'
-                    bundle install
+                    bundle config set --local path './vendor' > /dev/null
+                    bundle install > /dev/null
                     bundle exec rubocop
           - task: rspec
             image: ruby
@@ -96,8 +96,9 @@ jobs:
                 args:
                   - -exc
                   - |
-                    bundle config set --local path './vendor'
-                    bundle install
+                    bundle config set --local path './vendor' > /dev/null
+                    bundle install > /dev/null
+                    bundle exec rails db:setup > /dev/null
                     bundle exec rails spec
           - task: database-consistency
             image: ruby
@@ -113,10 +114,31 @@ jobs:
                 args:
                   - -exc
                   - |
-                    bundle config set --local path './vendor'
-                    bundle install
-                    bundle exec rails db:migrate
+                    bundle config set --local path './vendor' > /dev/null
+                    bundle install > /dev/null
+                    bundle exec rails db:setup > /dev/null
                     bundle exec database_consistency
+          - task: check-schema
+            image: ruby
+            config:
+              platform: linux
+              inputs:
+                - name: pull-request
+                  path: .
+              caches:
+                - path: vendor
+              run:
+                path: /bin/sh
+                args:
+                  - -exc
+                  - |
+                    bundle config set --local path './vendor' > /dev/null
+                    bundle install > /dev/null
+                    bundle exec rails db:setup > /dev/null
+                    export HASH1="$(md5sum ./db/schema.rb | awk '{print $1}')"
+                    bundle exec rails db:migrate:redo
+                    export HASH2="$(md5sum ./db/schema.rb | awk '{print $1}')"
+                    [ "$HASH1" = "$HASH2" ]
           - task: yamllint
             image: python
             config:
@@ -131,7 +153,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    pip install --cache-dir ./cache yamllint
+                    pip install --cache-dir ./cache yamllint > /dev/null
                     yamllint .
           - task: pre-commit
             image: python
@@ -149,7 +171,7 @@ jobs:
                 args:
                   - -exc
                   - |
-                    pip install --cache-dir ./cache pre-commit
+                    pip install --cache-dir ./cache pre-commit > /dev/null
                     pre-commit run --all-files
         on_failure:
           put: pull-request
