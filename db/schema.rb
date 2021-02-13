@@ -28,13 +28,13 @@ ActiveRecord::Schema.define(version: 2021_02_06_031504) do
   end
 
   create_table "friendships", id: { type: :binary, limit: 20 }, force: :cascade do |t|
-    t.binary "user_id", limit: 20
-    t.binary "friend_id", limit: 20
+    t.binary "sent_by_id", limit: 20
+    t.binary "sent_to_id", limit: 20
     t.integer "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["friend_id"], name: "index_friendships_on_friend_id"
-    t.index ["user_id"], name: "index_friendships_on_user_id"
+    t.index ["sent_by_id"], name: "index_friendships_on_sent_by_id"
+    t.index ["sent_to_id"], name: "index_friendships_on_sent_to_id"
   end
 
   create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
@@ -53,6 +53,6 @@ ActiveRecord::Schema.define(version: 2021_02_06_031504) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "friendships", "users"
-  add_foreign_key "friendships", "users", column: "friend_id"
+  add_foreign_key "friendships", "users", column: "sent_by_id"
+  add_foreign_key "friendships", "users", column: "sent_to_id"
 end
