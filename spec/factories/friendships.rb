@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :friendship, class: 'Friendship' do
-    user
-    association :friend, factory: :user
+    sent_by factory: :user
+    association :sent_to, factory: :user
   end
 end

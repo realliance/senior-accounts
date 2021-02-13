@@ -51,7 +51,7 @@ RSpec.describe FriendshipsController, type: :request do
       it 'sends a friend request' do
         post friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been sent.'))
-        expect(user.pending_friends).to include(friend)
+        expect(user.pending_requests).to include(friend)
       end
     end
 
@@ -88,11 +88,11 @@ RSpec.describe FriendshipsController, type: :request do
         Friendship.request(user, friend)
         delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend has been removed.'))
-        expect(user.pending_friends).not_to include(friend)
+        expect(user.pending_requests).not_to include(friend)
       end
 
       it 'removes a friendship' do
-        Friendship.create(user: user, friend: friend, status: 'accepted')
+        Friendship.create(sent_by: user, sent_to: friend, status: 'accepted')
         delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(user.friends).not_to include(friend)
       end

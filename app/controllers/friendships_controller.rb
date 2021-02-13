@@ -18,7 +18,7 @@ class FriendshipsController < ApplicationController
   end
 
   def update
-    @friendship = Friendship.find_by(user: @friend, friend: current_user, status: 'pending')
+    @friendship = Friendship.find_by(sent_by: @friend, sent_to: current_user, status: 'pending')
     if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend request could not be accepted.' }
     else
@@ -28,7 +28,7 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    @friendship = Friendship.find_by(user: current_user, friend: @friend).presence || Friendship.find_by(user: @friend, friend: current_user).presence
+    @friendship = Friendship.find_by(sent_by: @friend, sent_to: current_user).presence || Friendship.find_by(sent_by: current_user, sent_to: @friend).presence
     if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend could not be removed.' }
     else
