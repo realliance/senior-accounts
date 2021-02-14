@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe FriendshipsController, type: :routing do
   describe 'routing' do
+    it 'routes to #show via GET' do
+      expect(get: '/friendship').to route_to('friendships#show')
+    end
+
     it 'routes to #create via POST' do
       expect(post: '/friendship').to route_to('friendships#create')
     end
