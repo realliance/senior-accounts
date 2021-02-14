@@ -196,6 +196,18 @@ RSpec.describe UsersController, type: :request do
         expect(user.authenticate('a')).not_to be_truthy
       end
     end
+
+    context 'with invalid token' do
+      let(:invalid_attributes) do
+        attributes_for(:user, password: 'a', password_confirmation: 'a')
+      end
+
+      it 'does not reset password' do
+        post password_update_url(password_recovery_token: 'token'), params: { user: valid_attributes }, as: :json
+        user.reload
+        expect(user.authenticate('devise_sucks')).not_to be_truthy
+      end
+    end
   end
 
   context 'when logged out' do

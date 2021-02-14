@@ -6,6 +6,13 @@ RSpec.describe FriendshipsController, type: :request do
   context 'when logged out' do
     let(:friend) { create(:user) }
 
+    describe 'GET #show' do
+      it 'renders an unauthorized response' do
+        get friendship_url, as: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
     describe 'POST #create' do
       it 'renders an unauthorized response' do
         post friendship_url, as: :json
@@ -46,6 +53,13 @@ RSpec.describe FriendshipsController, type: :request do
 
     let(:user) { create(:user) }
     let(:friend) { create(:user) }
+
+    describe 'GET #show' do
+      it 'gets friend list' do
+        get friendship_url, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:ok)
+      end
+    end
 
     describe 'POST #create' do
       it 'sends a friend request' do
