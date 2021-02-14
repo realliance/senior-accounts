@@ -16,6 +16,6 @@ class Friendship < ApplicationRecord
   def self.request(user, friend)
     return if (user == friend) || Friendship.exists?(user, friend)
 
-    user.invitations_sent.create(sent_to: friend, status: :pending)
+    user.friendships_sent.create(sent_to: friend, status: :pending)
   end
 end

@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2021_02_06_031504) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "friendships", id: false, force: :cascade do |t|
+  create_table "friendships", id: { type: :binary, limit: 20 }, force: :cascade do |t|
     t.binary "sent_by_id", limit: 20
     t.binary "sent_to_id", limit: 20
     t.integer "status"
