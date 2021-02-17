@@ -2,41 +2,41 @@
 
 require 'rails_helper'
 
-RSpec.describe FriendshipsController, type: :request do
+RSpec.describe FriendsController, type: :request do
   context 'when logged out' do
     let(:friend) { create(:user) }
 
     describe 'GET #show' do
       it 'renders an unauthorized response' do
-        get friendship_url, as: :json
+        get friends_url, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     describe 'POST #create' do
       it 'renders an unauthorized response' do
-        post friendship_url, as: :json
+        post friends_url, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     describe 'PATCH #update' do
       it 'renders an unauthorized response' do
-        patch friendship_url, params: { id: friend.id.to_s }, as: :json
+        patch friends_url, params: { id: friend.id.to_s }, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     describe 'PUT #update' do
       it 'renders an unauthorized response' do
-        put friendship_url, params: { id: friend.id.to_s }, as: :json
+        put friends_url, params: { id: friend.id.to_s }, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     describe 'DELETE #destroy' do
       it 'renders an unauthorized response' do
-        delete friendship_url, params: { id: friend.id.to_s }, as: :json
+        delete friends_url, params: { id: friend.id.to_s }, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -56,41 +56,41 @@ RSpec.describe FriendshipsController, type: :request do
 
     describe 'GET #show' do
       it 'gets friend list' do
-        get friendship_url, headers: valid_headers, as: :json
+        get friends_url, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'POST #create' do
       it 'sends a friend request' do
-        post friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+        post friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been sent.'))
         expect(user.pending_requests).to include(friend)
       end
     end
 
     it 'fails to send a self request' do
-      post friendship_url, params: { id: user.id.to_s }, headers: valid_headers, as: :json
+      post friends_url, params: { id: user.id.to_s }, headers: valid_headers, as: :json
       expect(response.body).to match(a_string_including('Friend request could not be sent.'))
       expect(user.friends).not_to include(user)
     end
 
     it 'fails to send friend request if there is one already pending' do
-      Friendship.request(user, friend)
-      post friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+      Friends.request(user, friend)
+      post friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
       expect(response.body).to match(a_string_including('Friend request could not be sent.'))
     end
 
     describe 'PUT #update' do
       it 'accepts a friend request' do
-        Friendship.request(friend, user)
-        put friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+        Friends.request(friend, user)
+        put friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request has been accepted.'))
         expect(friend.friends).to include(user)
       end
 
       it 'fails to accept a nonexistent friend request  ' do
-        put friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+        put friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend request could not be accepted.'))
         expect(user.friends).not_to include(friend)
         expect(friend.friends).not_to include(user)
@@ -98,21 +98,21 @@ RSpec.describe FriendshipsController, type: :request do
     end
 
     describe 'DELETE #destroy' do
-      it 'removes a friendship request' do
-        Friendship.request(user, friend)
-        delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+      it 'removes a friends request' do
+        Friends.request(user, friend)
+        delete friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend has been removed.'))
         expect(user.pending_requests).not_to include(friend)
       end
 
-      it 'removes a friendship' do
-        Friendship.create(sent_by: user, sent_to: friend, status: 'accepted')
-        delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+      it 'removes a friends' do
+        Friends.create(sent_by: user, sent_to: friend, status: 'confirmed')
+        delete friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(user.friends).not_to include(friend)
       end
 
       it 'fails to remove a nonexistent friend' do
-        delete friendship_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
+        delete friends_url, params: { id: friend.id.to_s }, headers: valid_headers, as: :json
         expect(response.body).to match(a_string_including('Friend could not be removed.'))
       end
     end

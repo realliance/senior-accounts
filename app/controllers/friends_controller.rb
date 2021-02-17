@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FriendshipsController < ApplicationController
+class FriendsController < ApplicationController
   before_action :check_token, :users
   skip_before_action :users, only: %i[show]
 
@@ -9,7 +9,7 @@ class FriendshipsController < ApplicationController
   end
 
   def create
-    @friendship = Friendship.request(@user, @friend)
+    @friendship = Friends.request(@user, @friend)
     if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend request could not be sent.' }
     else
@@ -18,17 +18,17 @@ class FriendshipsController < ApplicationController
   end
 
   def update
-    @friendship = Friendship.find_by(sent_by: @friend, sent_to: current_user, status: 'pending')
+    @friendship = Friends.find_by(sent_by: @friend, sent_to: current_user, status: 'pending')
     if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend request could not be accepted.' }
     else
-      @friendship.accepted!
+      @friendship.confirmed!
       render status: :ok, json: { success: 'Friend request has been accepted.' }
     end
   end
 
   def destroy
-    @friendship = Friendship.find_by(sent_by: @friend, sent_to: current_user).presence || Friendship.find_by(sent_by: current_user, sent_to: @friend).presence
+    @friendship = Friends.find_by(sent_by: @friend, sent_to: current_user).presence || Friends.find_by(sent_by: current_user, sent_to: @friend).presence
     if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend could not be removed.' }
     else
