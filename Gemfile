@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.1.2.1'
+gem 'rails', '6.1.3'
 # Use unicorn as production server
 gem 'listen', '3.4.1'
 gem 'unicorn', '5.8.0'
@@ -51,7 +51,7 @@ group :development, :test do
   # Use ffaker to generate fake data for unit testing
   gem 'ffaker', '2.17.0'
   # Use rubocop for linting
-  gem 'rubocop', '1.9.1', require: false
+  gem 'rubocop', '1.10.0', require: false
   gem 'rubocop-rails', '2.9.1', require: false
   gem 'rubocop-rspec', '2.2.0', require: false
   # Use simplecov for test coverage viewing
