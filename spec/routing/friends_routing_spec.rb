@@ -20,7 +20,7 @@ RSpec.describe FriendsController, type: :routing do
       expect(patch: '/friends').to route_to('friends#update')
     end
 
-    it 'routes to #destroy_session via DELETE' do
+    it 'routes to #destroy via DELETE' do
       expect(delete: '/friends').to route_to('friends#destroy')
     end
   end

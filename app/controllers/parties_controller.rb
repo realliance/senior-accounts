@@ -20,7 +20,7 @@ class PartiesController < ApplicationController
 
   def update
     @member = Friends.find_by(sent_by: @friend, sent_to: current_user, status: :confirmed)
-    if @member.nil? || !@member.invited? || @member.party_members.count >= 2
+    if @member.nil? || !@member.invited? || @friend.party_members.count >= 2
       render status: :bad_request, json: { error: 'Invitation could not be accepted.' }
     else
       @member.accepted!
@@ -40,13 +40,13 @@ class PartiesController < ApplicationController
 
   def destroy
     current_user.party_members.destroy
-    current_user.invitations.destroy
+    current_user.invitations_pending.destroy
     render status: :ok, json: { success: 'Party has been disbanded.' }
   end
 
   private
 
-  def members
+  def users
     @user = current_user
     head :bad_request unless (@friend = User.find_by(id: params[:id]))
   end
