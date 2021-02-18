@@ -8,16 +8,12 @@ class Friends < ApplicationRecord
   scope :pending, -> { where(status: :pending) }
   scope :confirmed, -> { where(status: :confirmed) }
 
-  # enum invitation: { pending: 0, accepted: 1 }
-  # scope :invited, -> { where(status: :invited) }
-  # scope :confirmed, -> { where(status: :confirmed) }
-
-  def self.exists?(user, friend)
-    return true unless find_by(sent_by: user, sent_to: friend).nil?
-  end
+  enum invitation: { unsolicited: 0, invited: 1, accepted: 2 }
+  scope :invited, -> { where(invitation: :invited) }
+  scope :accepted, -> { where(invitation: :accepted) }
 
   def self.request(user, friend)
-    return if (user == friend) || Friends.exists?(user, friend)
+    return if (user == friend) || find_by(sent_by: user, sent_to: friend).present?
 
     user.friends_sent.create(sent_to: friend, status: :pending)
   end

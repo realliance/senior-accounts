@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_02_06_031504) do
     t.binary "sent_by_id", limit: 20
     t.binary "sent_to_id", limit: 20
     t.integer "status"
+    t.integer "invitation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sent_by_id"], name: "index_friends_on_sent_by_id"
