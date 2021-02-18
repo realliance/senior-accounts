@@ -10,7 +10,7 @@ class FriendsController < ApplicationController
 
   def create
     @friendship = Friends.request(current_user, @friend)
-    if @friendship.nil? || @friendship.blocked?
+    if @friendship.nil?
       render status: :bad_request, json: { error: 'Friend request could not be sent.' }
     else
       render status: :ok, json: { success: 'Friend request has been sent.' }
@@ -34,16 +34,6 @@ class FriendsController < ApplicationController
     else
       @friendship.destroy
       render status: :ok, json: { success: 'Friend has been removed.' }
-    end
-  end
-
-  def block
-    @friendship = Friends.find_by(sent_by: @friend, sent_to: current_user).presence || Friends.find_by(sent_by: current_user, sent_to: @friend).presence
-    if @friendship.nil?
-      render status: :bad_request, json: { error: 'User could not be blocked.' }
-    else
-      @friendship.blocked!
-      render status: :ok, json: { success: 'User has been blocked.' }
     end
   end
 

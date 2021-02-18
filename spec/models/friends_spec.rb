@@ -32,6 +32,6 @@ RSpec.describe Friends, type: :model do
 
   it 'sends a friend request' do
     described_class.request(requester, requestee)
-    expect(requester.pending_requests).to include(requestee)
+    expect(requester.friends_pending).to include(requestee)
   end
 end

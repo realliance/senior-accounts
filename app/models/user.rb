@@ -15,19 +15,23 @@ class User < ApplicationRecord
   validates :email_confirmation_token, uniqueness: true, allow_nil: true
   validates :password_recovery_token, uniqueness: true, allow_nil: true
 
-  has_many :friends_sent, class_name: 'Friends', foreign_key: 'sent_by_id', inverse_of: 'sent_by', dependent: :destroy
-  has_many :friends_received, class_name: 'Friends', foreign_key: 'sent_to_id', inverse_of: 'sent_to', dependent: :destroy
-  has_many :friended, -> { merge(Friends.confirmed) }, through: :friends_sent, source: :sent_to
-  has_many :friendships, -> { merge(Friends.confirmed) }, through: :friends_received, source: :sent_by
-  has_many :pending_requests, -> { merge(Friends.pending) }, through: :friends_sent, source: :sent_to
-  has_many :received_requests, -> { merge(Friends.pending) }, through: :friends_received, source: :sent_by
+  # Request associations.
+  has_many :requests_sent, class_name: 'Friends', foreign_key: 'sent_by_id', inverse_of: 'sent_by', dependent: :destroy
+  has_many :requests_received, class_name: 'Friends', foreign_key: 'sent_to_id', inverse_of: 'sent_to', dependent: :destroy
 
-  has_many :pending_invitations, -> { merge(Friends.invited) }, through: :friends_sent, source: :sent_to
-  has_many :received_invitations, -> { merge(Friends.invited) }, through: :friends_received, source: :sent_by
-  has_many :party_members, -> { merge(Friends.accepted) }, through: :friends_sent, source: :sent_to
+  # Friendship associations.
+  has_many :friended, -> { merge(Friends.confirmed) }, through: :requests_sent, source: :sent_to
+  has_many :friended_by, -> { merge(Friends.confirmed) }, through: :requests_received, source: :sent_by
+  has_many :friends_pending, -> { merge(Friends.pending) }, through: :requests_sent, source: :sent_to
+  has_many :friends_awaiting, -> { merge(Friends.pending) }, through: :requests_received, source: :sent_by
+
+  # Party associations.
+  has_many :invitations_pending, -> { merge(Friends.invited) }, through: :requests_sent, source: :sent_to
+  has_many :invitations_received, -> { merge(Friends.invited) }, through: :requests_received, source: :sent_by
+  has_many :party_members, -> { merge(Friends.accepted) }, through: :requests_sent, source: :sent_to
 
   def friends
-    friended + friendships
+    friended + friended_by
   end
 
   private

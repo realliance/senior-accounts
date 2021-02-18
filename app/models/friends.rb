@@ -15,6 +15,6 @@ class Friends < ApplicationRecord
   def self.request(user, friend)
     return if (user == friend) || find_by(sent_by: user, sent_to: friend).present?
 
-    user.friends_sent.create(sent_to: friend, status: :pending)
+    user.requests_sent.create(sent_to: friend, status: :pending)
   end
 end

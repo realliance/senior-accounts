@@ -12,10 +12,7 @@ Rails.application.routes.draw do
   post '/password/reset/:password_recovery_token', to: 'users#password_update', as: 'password_update'
 
   resource :friends, only: %i[show create update destroy]
-  post '/friends/block', to: 'friends#block'
 
-  post '/friends/invite', to: 'friends#invite'
-  post '/friends/accept_invitation', to: 'friends#accept_invitation'
-  post '/friends/kick', to: 'friends#kick'
-  delete '/friends/disband', to: 'friends#disband'
+  resource :parties, only: %i[show create update destroy]
+  post '/parties/kick', to: 'parties#kick'
 end
