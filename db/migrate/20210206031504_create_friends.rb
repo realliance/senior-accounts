@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateFriendships < ActiveRecord::Migration[6.1]
+class CreateFriends < ActiveRecord::Migration[6.1]
   def change
-    create_table :friendships, id: false do |t|
+    create_table :friends, id: false do |t|
       t.ksuid_binary :id, primary_key: true
 
       t.references :sent_by, foreign_key: { to_table: :users }, type: 'blob(20)'

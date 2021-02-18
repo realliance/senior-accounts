@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe Friendship, type: :model do
+RSpec.describe Friends, type: :model do
   let(:requester) { create(:user) }
   let(:requestee) { create(:user) }
-  let(:friendship) { create(:friendship, sent_by_id: requester.id, sent_to_id: requestee.id) }
+  let(:friendship) { create(:friends, sent_by_id: requester.id, sent_to_id: requestee.id) }
 
   it 'is valid with valid attributes' do
     expect(friendship).to be_valid
@@ -22,7 +22,7 @@ RSpec.describe Friendship, type: :model do
   end
 
   it 'is valid with correct status' do
-    friendship.status = 'accepted'
+    friendship.status = 'confirmed'
     expect(friendship).to be_valid
   end
 
@@ -32,6 +32,6 @@ RSpec.describe Friendship, type: :model do
 
   it 'sends a friend request' do
     described_class.request(requester, requestee)
-    expect(requester.pending_requests).to include(requestee)
+    expect(requester.friends_pending).to include(requestee)
   end
 end
