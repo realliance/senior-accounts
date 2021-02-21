@@ -49,7 +49,7 @@ group :development, :test do
   # Use factory_bot_rails for defining and using factories
   gem 'factory_bot_rails', '6.1.0'
   # Use ffaker to generate fake data for unit testing
-  gem 'ffaker', '2.17.0'
+  gem 'ffaker', '2.18.0'
   # Use rubocop for linting
   gem 'rubocop', '1.10.0', require: false
   gem 'rubocop-rails', '2.9.1', require: false
