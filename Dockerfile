@@ -4,7 +4,7 @@ ENV RAILS_ENV production
 
 RUN apk add --no-cache --update build-base postgresql-dev tzdata
 
-ADD Gemfile* ./
+COPY Gemfile* ./
 RUN bundle config set --local without 'development test' && \
     bundle config set --local path './vendor' && \
     bundle install
@@ -19,12 +19,12 @@ ENV RELEASE $RELEASE
 RUN apk add --no-cache --update postgresql-libs tzdata
 
 COPY --from=builder /usr/src/vendor /usr/src/vendor
-ADD Gemfile* ./
+COPY Gemfile* ./
 RUN bundle config set --local without 'development test' && \
     bundle config set --local path './vendor' && \
     bundle install
 
-ADD . .
+COPY . .
 RUN mkdir tmp && \
     chown 1000:1000 tmp
 

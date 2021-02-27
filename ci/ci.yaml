@@ -9,6 +9,7 @@ resources:
     type: pull-request
     icon: source-branch
     webhook_token: ((webhook-token))
+    check_every: 1h
     source:
       repository: realliance/senior-accounts
       access_token: ((github-access-token))
@@ -18,12 +19,14 @@ resources:
     type: git
     icon: git
     webhook_token: ((webhook-token))
+    check_every: 1h
     source:
       uri: https://github.com/realliance/senior-accounts
       branch: main
   - name: quay
     type: registry-image
     icon: docker
+    check_every: never
     source:
       repository: quay.io/realliance/senior-accounts
       tag: latest
@@ -32,21 +35,25 @@ resources:
   - name: ruby
     type: registry-image
     icon: docker
+    check_every: never
     source:
       repository: docker.io/ruby
   - name: python
     type: registry-image
     icon: docker
+    check_every: never
     source:
       repository: docker.io/python
   - name: oci-build-task
     type: registry-image
     icon: docker
+    check_every: never
     source:
       repository: docker.io/vito/oci-build-task
   - name: sentry-cli
     type: registry-image
     icon: docker
+    check_every: never
     source:
       repository: docker.io/getsentry/sentry-cli
 jobs:
@@ -212,7 +219,7 @@ jobs:
             args:
               - -exc
               - |
-                VERSION=$(sentry-cli releases propose-version)
+                VERSION=senior-accounts@$(sentry-cli releases propose-version)
                 echo $VERSION > release/version.txt
                 sentry-cli releases new -p senior-accounts "$VERSION"
                 sentry-cli releases set-commits --auto "$VERSION"
