@@ -26,7 +26,7 @@ resources:
   - name: quay
     type: registry-image
     icon: docker
-    check_every: never
+    check_every: 1h
     source:
       repository: quay.io/realliance/senior-accounts
       tag: latest
@@ -35,25 +35,25 @@ resources:
   - name: ruby
     type: registry-image
     icon: docker
-    check_every: never
+    check_every: 1h
     source:
       repository: docker.io/ruby
   - name: python
     type: registry-image
     icon: docker
-    check_every: never
+    check_every: 1h
     source:
       repository: docker.io/python
   - name: oci-build-task
     type: registry-image
     icon: docker
-    check_every: never
+    check_every: 1h
     source:
       repository: docker.io/vito/oci-build-task
   - name: sentry-cli
     type: registry-image
     icon: docker
-    check_every: never
+    check_every: 1h
     source:
       repository: docker.io/getsentry/sentry-cli
 jobs:
