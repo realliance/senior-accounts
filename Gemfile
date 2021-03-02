@@ -38,7 +38,7 @@ gem 'sentry-ruby', '4.2.2'
 
 group :development, :test do
   # Use Puma as the app server
-  gem 'puma', '5.2.1'
+  gem 'puma', '5.2.2'
   # Use sqlite3 as the development database
   gem 'sqlite3', '1.4.2'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -51,7 +51,7 @@ group :development, :test do
   # Use ffaker to generate fake data for unit testing
   gem 'ffaker', '2.18.0'
   # Use rubocop for linting
-  gem 'rubocop', '1.10.0', require: false
+  gem 'rubocop', '1.11.0', require: false
   gem 'rubocop-rails', '2.9.1', require: false
   gem 'rubocop-rspec', '2.2.0', require: false
   # Use simplecov for test coverage viewing
