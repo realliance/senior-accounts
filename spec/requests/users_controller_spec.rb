@@ -11,6 +11,13 @@ RSpec.describe UsersController, type: :request do
     attributes_for(:user, email: 'a')
   end
 
+  describe 'GET #register' do
+    it 'renders the registration view' do
+      get register_url
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid parameters' do
       let(:user) do
@@ -29,10 +36,9 @@ RSpec.describe UsersController, type: :request do
         end.to have_enqueued_mail(UserMailer, :email_confirmation)
       end
 
-      it 'renders a JSON response with the new user' do
+      it 'renders a response with the new user' do
         post user_url, params: { user: valid_attributes }, as: :json
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
@@ -43,10 +49,9 @@ RSpec.describe UsersController, type: :request do
         end.to change(User, :count).by(0)
       end
 
-      it 'renders a JSON response with errors for the new user' do
+      it 'renders a response with errors for the new user' do
         post user_url, params: { user: invalid_attributes }, as: :json
         expect(response).to have_http_status(:bad_request)
-        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
   end
@@ -194,6 +199,18 @@ RSpec.describe UsersController, type: :request do
         post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: invalid_attributes }, as: :json
         user.reload
         expect(user.authenticate('a')).not_to be_truthy
+      end
+    end
+
+    context 'with invalid recovery token' do
+      let(:valid_attributes) do
+        attributes_for(:user, password: 'devise_sucks', password_confirmation: 'devise_sucks')
+      end
+
+      it 'renders error response' do
+        post password_update_url(password_recovery_token: 'invalid_token'), params: { user: valid_attributes }, as: :json
+        user.reload
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end

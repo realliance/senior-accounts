@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   post '/password/recovery', to: 'users#password_recovery'
   get '/password/reset/:password_recovery_token', to: 'users#password_reset', as: 'password_reset'
   post '/password/reset/:password_recovery_token', to: 'users#password_update', as: 'password_update'
+  get '/register', to: 'users#register', as: 'register'
 end

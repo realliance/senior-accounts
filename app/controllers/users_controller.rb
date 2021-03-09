@@ -7,13 +7,16 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
+  def register
+    @user = User.new
+  end
+
   def create
     @user = User.create(user_params)
     if @user.save
-      render status: :created, action: :show
+      render :confirmation, formats: [:html], locals: { title: 'Success!', body: 'Your account has been created.' }, status: :created
     else
-      @user.errors.add(:email, @user.errors.delete(:unconfirmed_email)) if @user.errors.include?(:unconfirmed_email)
-      render status: :bad_request, json: @user.errors
+      render :register, formats: [:html], status: :bad_request
     end
   end
 
@@ -30,7 +33,7 @@ class UsersController < ApplicationController
   def confirm_email
     @user = User.find_by(email_confirmation_token: params[:email_confirmation_token])
     if @user&.update(email: @user.unconfirmed_email, unconfirmed_email: nil, email_confirmation_token: nil)
-      render :email_confirmation, formats: [:html]
+      render :confirmation, formats: [:html], locals: { title: 'Success!', body: 'Your email has been confirmed.' }
     else
       render :error, formats: [:html], locals: { title: 'Email Confirmation' }, status: :bad_request
     end
@@ -67,7 +70,7 @@ class UsersController < ApplicationController
   def password_update
     @user = User.find_by(password_recovery_token: params[:password_recovery_token])
     if @user&.update(password_params)
-      render :password_reset_confirmation, formats: [:html]
+      render :confirmation, formats: [:html], locals: { title: 'Success!', body: 'Your password has been updated.' }
     elsif @user
       render :password_reset, formats: [:html]
     else
