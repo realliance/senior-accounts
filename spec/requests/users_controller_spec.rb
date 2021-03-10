@@ -121,15 +121,13 @@ RSpec.describe UsersController, type: :request do
 
       it 'enqueues password recovery email to be delivered later' do
         expect do
-          post password_recovery_url, params: { username: user.username }, as: :json
+          post password_recovery_url, params: { username: user.username }
         end.to have_enqueued_mail(UserMailer, :password_recovery)
       end
 
-      it 'renders a JSON with password recovery information' do
-        post password_recovery_url, params: { username: user.username }, as: :json
+      it 'renders a respond with password recovery information' do
+        post password_recovery_url, params: { username: user.username }
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
       end
     end
 
@@ -140,15 +138,13 @@ RSpec.describe UsersController, type: :request do
 
       it 'does not send a password recovery email' do
         expect do
-          post password_recovery_url, params: { username: user.username }, as: :json
+          post password_recovery_url, params: { username: user.username }
         end.not_to have_enqueued_mail(UserMailer, :password_recovery)
       end
 
-      it 'renders a JSON with password recovery information' do
-        post password_recovery_url, params: { username: user.username }, as: :json
+      it 'renders a response with password recovery information' do
+        post password_recovery_url, params: { username: user.username }
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
       end
     end
   end

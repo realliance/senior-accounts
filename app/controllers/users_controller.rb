@@ -59,7 +59,8 @@ class UsersController < ApplicationController
       @user.regenerate_password_recovery_token
       UserMailer.password_recovery(@user).deliver_later
     end
-    render status: :ok, json: { success: 'The information to reset the password has been sent.' }
+
+    render :confirmation, formats: [:html], locals: { title: 'Email Sent', body: "If there is an account registered to  #{params[:username]} we have sent instructions for how to reset your password." } if params[:commit] == 'Recover Account'
   end
 
   def password_reset
