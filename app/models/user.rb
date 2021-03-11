@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   validates :email, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :unconfirmed_email, exclusion: { in: ->(u) { [u.email] } }, length: 1..100, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
-  validates :username, presence: true, uniqueness: true, length: 3..100
+  validates :username, presence: true, uniqueness: true, length: 3..32
   validates :password, length: 10..72, allow_nil: true
   validates :auth_token, uniqueness: true, allow_nil: true
   validates :email_confirmation_token, uniqueness: true, allow_nil: true
