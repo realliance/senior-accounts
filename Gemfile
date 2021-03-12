@@ -33,8 +33,8 @@ gem 'cancancan', '3.2.1'
 gem 'delayed_job_active_record', '4.1.5'
 
 # Sentry
-gem 'sentry-rails', '4.2.2'
-gem 'sentry-ruby', '4.2.2'
+gem 'sentry-rails', '4.3.0'
+gem 'sentry-ruby', '4.3.0'
 
 group :development, :test do
   # Use Puma as the app server
