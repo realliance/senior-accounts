@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_072247) do
+ActiveRecord::Schema.define(version: 2021_02_06_031504) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -25,6 +25,17 @@ ActiveRecord::Schema.define(version: 2021_02_03_072247) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "friends", id: { type: :binary, limit: 20 }, force: :cascade do |t|
+    t.binary "sent_by_id", limit: 20
+    t.binary "sent_to_id", limit: 20
+    t.integer "status"
+    t.integer "invitation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sent_by_id"], name: "index_friends_on_sent_by_id"
+    t.index ["sent_to_id"], name: "index_friends_on_sent_to_id"
   end
 
   create_table "users", id: { type: :binary, limit: 20 }, force: :cascade do |t|
@@ -43,4 +54,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_072247) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "friends", "users", column: "sent_by_id"
+  add_foreign_key "friends", "users", column: "sent_to_id"
 end
