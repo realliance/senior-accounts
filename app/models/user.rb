@@ -15,6 +15,20 @@ class User < ApplicationRecord
   validates :email_confirmation_token, uniqueness: true, allow_nil: true
   validates :password_recovery_token, uniqueness: true, allow_nil: true
 
+  # Request associations.
+  has_many :requests_sent, class_name: 'Friends', foreign_key: 'sent_by_id', inverse_of: 'sent_by', dependent: :destroy
+  has_many :requests_received, class_name: 'Friends', foreign_key: 'sent_to_id', inverse_of: 'sent_to', dependent: :destroy
+
+  # Friendship associations.
+  has_many :friended, -> { merge(Friends.confirmed) }, through: :requests_sent, source: :sent_to
+  has_many :friended_by, -> { merge(Friends.confirmed) }, through: :requests_received, source: :sent_by
+  has_many :friends_pending, -> { merge(Friends.pending) }, through: :requests_sent, source: :sent_to
+  has_many :friends_awaiting, -> { merge(Friends.pending) }, through: :requests_received, source: :sent_by
+
+  def friends
+    friended + friended_by
+  end
+
   private
 
   def send_confirmation_email
