@@ -11,6 +11,13 @@ RSpec.describe UsersController, type: :request do
     attributes_for(:user, email: 'a')
   end
 
+  describe 'GET #register' do
+    it 'renders the registration view' do
+      get register_url
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid parameters' do
       let(:user) do
@@ -29,10 +36,9 @@ RSpec.describe UsersController, type: :request do
         end.to have_enqueued_mail(UserMailer, :email_confirmation)
       end
 
-      it 'renders a JSON response with the new user' do
+      it 'renders a response with the new user' do
         post user_url, params: { user: valid_attributes }, as: :json
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
@@ -43,10 +49,9 @@ RSpec.describe UsersController, type: :request do
         end.to change(User, :count).by(0)
       end
 
-      it 'renders a JSON response with errors for the new user' do
+      it 'renders a response with errors for the new user' do
         post user_url, params: { user: invalid_attributes }, as: :json
         expect(response).to have_http_status(:bad_request)
-        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
   end
@@ -116,15 +121,13 @@ RSpec.describe UsersController, type: :request do
 
       it 'enqueues password recovery email to be delivered later' do
         expect do
-          post password_recovery_url, params: { username: user.username }, as: :json
+          post password_recovery_url, params: { username: user.username }
         end.to have_enqueued_mail(UserMailer, :password_recovery)
       end
 
-      it 'renders a JSON with password recovery information' do
-        post password_recovery_url, params: { username: user.username }, as: :json
+      it 'renders a respond with password recovery information' do
+        post password_recovery_url, params: { username: user.username }
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
       end
     end
 
@@ -135,15 +138,13 @@ RSpec.describe UsersController, type: :request do
 
       it 'does not send a password recovery email' do
         expect do
-          post password_recovery_url, params: { username: user.username }, as: :json
+          post password_recovery_url, params: { username: user.username }
         end.not_to have_enqueued_mail(UserMailer, :password_recovery)
       end
 
-      it 'renders a JSON with password recovery information' do
-        post password_recovery_url, params: { username: user.username }, as: :json
+      it 'renders a response with password recovery information' do
+        post password_recovery_url, params: { username: user.username }
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-        expect(response.body).to match(a_string_including('The information to reset the password has been sent.'))
       end
     end
   end
@@ -194,6 +195,18 @@ RSpec.describe UsersController, type: :request do
         post password_update_url(password_recovery_token: user.password_recovery_token), params: { user: invalid_attributes }, as: :json
         user.reload
         expect(user.authenticate('a')).not_to be_truthy
+      end
+    end
+
+    context 'with invalid recovery token' do
+      let(:valid_attributes) do
+        attributes_for(:user, password: 'devise_sucks', password_confirmation: 'devise_sucks')
+      end
+
+      it 'renders error response' do
+        post password_update_url(password_recovery_token: 'invalid_token'), params: { user: valid_attributes }, as: :json
+        user.reload
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end

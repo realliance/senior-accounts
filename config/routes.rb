@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   post :session, to: 'users#create_session'
   delete :session, to: 'users#destroy_session'
   get '/confirm/:email_confirmation_token', to: 'users#confirm_email', as: 'confirm_email'
-  post '/password/recovery', to: 'users#password_recovery'
+  post '/password/recovery', to: 'users#password_recovery', as: 'password_recovery'
+  get '/password/recovery', to: 'users#password_recovery'
   get '/password/reset/:password_recovery_token', to: 'users#password_reset', as: 'password_reset'
   post '/password/reset/:password_recovery_token', to: 'users#password_update', as: 'password_update'
+  get '/register', to: 'users#register', as: 'register'
 end

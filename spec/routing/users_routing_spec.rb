@@ -8,6 +8,14 @@ RSpec.describe UsersController, type: :routing do
       expect(get: '/user').to route_to('users#show')
     end
 
+    it 'routes to #register via GET' do
+      expect(get: '/register').to route_to('users#register')
+    end
+
+    it 'routes to #password_recovery via GET' do
+      expect(get: '/password/recovery').to route_to('users#password_recovery')
+    end
+
     it 'routes to #create via POST' do
       expect(post: '/user').to route_to('users#create')
     end
