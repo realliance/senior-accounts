@@ -242,7 +242,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
-    unicorn (5.8.0)
+    unicorn (6.0.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     websocket-driver (0.7.3)
@@ -282,7 +282,7 @@ DEPENDENCIES
   spring (= 2.1.1)
   sqlite3 (= 1.4.2)
   tzinfo-data (= 1.2021.1)
-  unicorn (= 5.8.0)
+  unicorn (= 6.0.0)
 
 RUBY VERSION
    ruby 3.0.0p0
