@@ -9,7 +9,7 @@ ruby '3.0.0'
 gem 'rails', '6.1.3'
 # Use unicorn as production server
 gem 'listen', '3.4.1'
-gem 'unicorn', '5.8.0'
+gem 'unicorn', '6.0.0'
 # Use Rack Timeout for handling hanging clients in production
 gem 'rack-timeout', '0.6.0'
 # Use jbuilder for easier JSON API creation
