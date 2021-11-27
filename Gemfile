@@ -63,7 +63,7 @@ end
 group :development do
   # Use spring for development speed up
   gem 'letter_opener', '1.7'
-  gem 'spring', '2.1.1'
+  gem 'spring', '3.1.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
